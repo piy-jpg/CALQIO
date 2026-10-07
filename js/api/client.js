@@ -38,9 +38,13 @@ export const ApiClient = {
       ...(options.headers || {})
     };
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), options.timeout || 2500);
+
     const config = {
       ...options,
-      headers
+      headers,
+      signal: controller.signal
     };
 
     if (options.body && typeof options.body === 'object') {
@@ -49,6 +53,7 @@ export const ApiClient = {
 
     try {
       const res = await fetch(endpoint, config);
+      clearTimeout(timeoutId);
       const json = await res.json().catch(() => ({ success: false, error: 'Invalid server response' }));
 
       if (!res.ok || json.success === false) {
@@ -61,7 +66,8 @@ export const ApiClient = {
 
       return json.data !== undefined ? json.data : json;
     } catch (err) {
-      console.warn(`[API Client] ${options.method || 'GET'} ${endpoint} failed:`, err.message);
+      clearTimeout(timeoutId);
+      console.warn(`[API Client] ${options.method || 'GET'} ${endpoint} notice:`, err.message);
       throw err;
     }
   },

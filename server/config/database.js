@@ -44,13 +44,20 @@ const memoryStore = {
  * Initialize Database Connection
  */
 export async function initDatabase() {
-  const connectionString = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/calqio';
+  const connectionString = process.env.DATABASE_URL;
+
+  // On Vercel / serverless cloud environments without explicit DATABASE_URL, use in-memory store immediately
+  if (!connectionString || (process.env.VERCEL && !process.env.DATABASE_URL)) {
+    console.log(' [DB] Cloud environment without DATABASE_URL: Using resilient in-memory store.');
+    isMock = true;
+    return;
+  }
 
   try {
     pool = new Pool({
       connectionString,
-      connectionTimeoutMillis: 2000,
-      idleTimeoutMillis: 10000,
+      connectionTimeoutMillis: 1500,
+      idleTimeoutMillis: 5000,
       max: 10
     });
 
