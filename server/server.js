@@ -112,24 +112,24 @@ export async function startServer() {
 
   const app = createApp();
 
-  for (const port of ALT_PORTS) {
-    try {
-      const server = app.listen(port, () => {
-        console.log(` CALQIO Full-Stack Server running at: http://localhost:${port}/`);
-        console.log(` REST API available at: http://localhost:${port}/api/health`);
-      });
+  const port = process.env.PORT || 3000;
+  const server = app.listen(port, () => {
+    console.log(` CALQIO Full-Stack Server running at: http://localhost:${port}/`);
+    console.log(` REST API available at: http://localhost:${port}/api/health`);
+  });
 
-      server.on('error', (err) => {
-        if (err.code === 'EADDRINUSE') {
-          console.warn(` [Server] Port ${port} is in use, trying next...`);
-        } else {
-          console.error(` [Server] Error on port ${port}:`, err.message);
-        }
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      const altPort = 8080;
+      console.warn(` [Server] Port ${port} in use, trying port ${altPort}...`);
+      app.listen(altPort, () => {
+        console.log(` CALQIO Full-Stack Server running at: http://localhost:${altPort}/`);
+        console.log(` REST API available at: http://localhost:${altPort}/api/health`);
       });
-    } catch (e) {
-      console.warn(`Could not bind to port ${port}:`, e.message);
+    } else {
+      console.error(` [Server] Error:`, err.message);
     }
-  }
+  });
 }
 
 // Start if invoked directly

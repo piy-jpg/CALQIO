@@ -73,9 +73,17 @@ export const GoogleAuthService = {
   /**
    * Wait for Google Identity Services SDK to load asynchronously
    */
-  async waitForGoogleSdk(maxWaitMs = 4000) {
+  async waitForGoogleSdk(maxWaitMs = 3000) {
     if (typeof window === 'undefined') return false;
     if (window.google?.accounts?.oauth2 || window.google?.accounts?.id) return true;
+
+    if (typeof document !== 'undefined' && !document.querySelector('script[src*="accounts.google.com/gsi/client"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
 
     const startTime = Date.now();
     return new Promise((resolve) => {
@@ -99,18 +107,17 @@ export const GoogleAuthService = {
       this.onAuthChange(callback);
     }
 
-    if (this.isInitialized) return;
+    if (this.isInitialized && this.tokenClient) return;
     if (typeof window === 'undefined') return;
 
     await this.waitForGoogleSdk();
-    if (!window.google?.accounts) return;
 
     const clientId = this.getClientId();
     if (!clientId) return;
 
     try {
       // 1. Initialize Google ID (One-Tap / Credential listener)
-      if (window.google.accounts.id) {
+      if (window.google?.accounts?.id) {
         window.google.accounts.id.initialize({
           client_id: clientId,
           callback: async (response) => {
@@ -123,7 +130,7 @@ export const GoogleAuthService = {
       }
 
       // 2. Initialize OAuth 2.0 Token Client for authentic popup flow
-      if (window.google.accounts.oauth2) {
+      if (window.google?.accounts?.oauth2) {
         this.tokenClient = window.google.accounts.oauth2.initTokenClient({
           client_id: clientId,
           scope: 'openid profile email',
@@ -138,7 +145,9 @@ export const GoogleAuthService = {
         });
       }
 
-      this.isInitialized = true;
+      if (this.tokenClient || window.google?.accounts?.id) {
+        this.isInitialized = true;
+      }
     } catch (err) {
       console.warn('Google Identity Services initialization notice:', err.message);
     }
@@ -234,7 +243,7 @@ export const GoogleAuthService = {
   async promptSignIn() {
     await this.init();
 
-    // 1. Use TokenClient to trigger authentic Google Accounts Chooser Popup
+    // 1. Primary: Use GIS TokenClient popup flow
     if (this.tokenClient) {
       return new Promise((resolve) => {
         const prevCallback = this.tokenClient.callback;
@@ -256,28 +265,94 @@ export const GoogleAuthService = {
           this.tokenClient.requestAccessToken({ prompt: 'select_account' });
         } catch (err) {
           console.warn('Token client request error:', err);
-          Toast.show('Google sign-in popup could not be opened: ' + err.message, 'error');
-          resolve(null);
+          this.openDirectOAuthPopup().then(resolve);
         }
       });
     }
 
-    // 2. Fallback to Google ID Prompt
-    if (typeof window !== 'undefined' && window.google?.accounts?.id) {
-      return new Promise((resolve) => {
-        window.google.accounts.id.prompt((notification) => {
-          if (notification.isNotDisplayed()) {
-            Toast.show('Google Sign-In prompt was suppressed or not displayed.', 'warning');
-            resolve(null);
-          } else if (notification.isSkippedMoment()) {
-            resolve(null);
-          }
-        });
-      });
+    // 2. Fallback: Direct Authentic Google OAuth 2.0 Web Chooser Popup
+    return await this.openDirectOAuthPopup();
+  },
+
+  /**
+   * Direct Authentic Google OAuth 2.0 Popup Chooser Fallback
+   */
+  async openDirectOAuthPopup() {
+    const clientId = this.getClientId();
+    if (!clientId) {
+      Toast.show('Google Client ID is not configured.', 'error');
+      return null;
     }
 
-    Toast.show('Google Identity Services is still loading. Please try again in a moment.', 'info');
-    return null;
+    const redirectUri = window.location.origin;
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token%20id_token&scope=${encodeURIComponent('openid profile email')}&prompt=select_account&nonce=${Date.now()}`;
+
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+
+    const popup = window.open(
+      authUrl,
+      'google_oauth_signin',
+      `width=${width},height=${height},left=${left},top=${top},status=no,toolbar=no,menubar=no,location=yes`
+    );
+
+    if (!popup) {
+      Toast.show('Please allow popups for Google Sign-In.', 'warning');
+      return null;
+    }
+
+    return new Promise((resolve) => {
+      let resolved = false;
+
+      const checkInterval = setInterval(() => {
+        try {
+          if (!popup || popup.closed) {
+            clearInterval(checkInterval);
+            if (!resolved) {
+              resolve(null);
+            }
+            return;
+          }
+
+          if (popup.location && popup.location.origin === window.location.origin) {
+            const hash = popup.location.hash;
+            if (hash && (hash.includes('access_token=') || hash.includes('id_token='))) {
+              clearInterval(checkInterval);
+              resolved = true;
+              popup.close();
+
+              const params = new URLSearchParams(hash.substring(1));
+              const accessToken = params.get('access_token');
+              const idToken = params.get('id_token');
+
+              if (accessToken) {
+                this.fetchGoogleUserInfo(accessToken).then((user) => {
+                  this.notifyAuthListeners(user);
+                  resolve(user);
+                });
+              } else if (idToken) {
+                this.handleCredentialResponse({ credential: idToken }).then((user) => {
+                  this.notifyAuthListeners(user);
+                  resolve(user);
+                });
+              } else {
+                resolve(null);
+              }
+            }
+          }
+        } catch (e) {
+          // Cross-origin access in popup before redirect is normal, wait for return
+        }
+      }, 200);
+
+      // Max timeout 3 minutes
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        if (!resolved) resolve(null);
+      }, 180000);
+    });
   },
 
   /**
