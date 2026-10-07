@@ -1,0 +1,186 @@
+/* ==========================================================================
+   CALQIO DESIGN TOKENS & SYSTEM VARIABLES
+   ========================================================================== */
+
+:root {
+  /* ==========================================================================
+     BLUEPRINT THEME (LIGHT - DEFAULT)
+     Mood: Precise, Engineering, Modern Drafting Workspace
+     ========================================================================== */
+  --bg-app: #F5F8FD;
+  --bg-surface: #FFFFFF;
+  --bg-surface-hover: #EDF3FA;
+  --bg-surface-active: #E1ECF9;
+  --bg-subtle: #EDF4FB;
+  --bg-input: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-overlay: rgba(15, 23, 42, 0.45);
+  --bg-glass: rgba(255, 255, 255, 0.90);
+
+  --border-subtle: #E1E8F2;
+  --border-default: #CBD7E6;
+  --border-focus: #1D4ED8;
+
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --text-inverse: #FFFFFF;
+
+  /* Primary Accent: Precision Engineering Blue */
+  --accent-primary: #1D4ED8;
+  --accent-primary-hover: #1E40AF;
+  --accent-primary-light: #EFF6FF;
+  --accent-primary-border: #BFDBFE;
+
+  /* Secondary Accent: Vibrant Highlighting Orange */
+  --accent-secondary: #F97316;
+  --accent-secondary-hover: #EA580C;
+  --accent-secondary-light: #FFF7ED;
+  --accent-secondary-border: #FED7AA;
+  
+  --accent-success: #059669;
+  --accent-success-light: #ECFDF5;
+  --accent-warning: #D97706;
+  --accent-warning-light: #FFFBEB;
+  --accent-danger: #E11D48;
+  --accent-danger-light: #FFF1F2;
+  --accent-info: #0284C7;
+  --accent-info-light: #F0F9FF;
+
+  /* Category Color Palette */
+  --cat-math: #8B5CF6;
+  --cat-math-bg: #F5F3FF;
+  --cat-math-border: #DDD6FE;
+
+  --cat-engineering: #1D4ED8;
+  --cat-engineering-bg: #EFF6FF;
+  --cat-engineering-border: #BFDBFE;
+
+  --cat-finance: #059669;
+  --cat-finance-bg: #ECFDF5;
+  --cat-finance-border: #A7F3D0;
+
+  --cat-science: #0284C7;
+  --cat-science-bg: #F0F9FF;
+  --cat-science-border: #BAE6FD;
+
+  --cat-health: #E11D48;
+  --cat-health-bg: #FFF1F2;
+  --cat-health-border: #FECDD3;
+
+  --cat-everyday: #D97706;
+  --cat-everyday-bg: #FFFBEB;
+  --cat-everyday-border: #FDE68A;
+
+  /* Shadows & Elevations */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.03);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+  --shadow-glow: 0 0 20px rgba(29, 78, 216, 0.18);
+
+  /* Radiuses */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, Monaco, monospace;
+
+  /* Layout Measurements */
+  --header-height: 58px;
+  --sidebar-width: 270px;
+  --sidebar-collapsed-width: 72px;
+  --mobile-bottom-bar-height: 60px;
+  --content-max-width: 1240px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   MIDNIGHT AURORA THEME (DARK)
+   Mood: Modern, Techy, Luminous Glow
+   ========================================================================== */
+[data-theme="dark"] {
+  --bg-app: #080C1A;
+  --bg-surface: #0E152E;
+  --bg-surface-hover: #162044;
+  --bg-surface-active: #1D2A59;
+  --bg-subtle: #121A38;
+  --bg-input: #0B1124;
+  --bg-card: #0E152E;
+  --bg-overlay: rgba(3, 7, 18, 0.82);
+  --bg-glass: rgba(14, 21, 46, 0.88);
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.14);
+  --border-focus: #22D3EE;
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-inverse: #0F172A;
+
+  /* Primary Accent: Cyan */
+  --accent-primary: #22D3EE;
+  --accent-primary-hover: #67E8F9;
+  --accent-primary-light: rgba(34, 211, 238, 0.12);
+  --accent-primary-border: rgba(34, 211, 238, 0.35);
+
+  /* Secondary Accent: Aurora Violet */
+  --accent-secondary: #8B5CF6;
+  --accent-secondary-hover: #A78BFA;
+  --accent-secondary-light: rgba(139, 92, 246, 0.15);
+  --accent-secondary-border: rgba(139, 92, 246, 0.35);
+
+  --accent-success: #34D399;
+  --accent-success-light: rgba(52, 211, 153, 0.12);
+  --accent-warning: #FBBF24;
+  --accent-warning-light: rgba(251, 191, 36, 0.12);
+  --accent-danger: #F87171;
+  --accent-danger-light: rgba(248, 113, 113, 0.12);
+  --accent-info: #38BDF8;
+  --accent-info-light: rgba(56, 189, 248, 0.12);
+
+  /* Category Palette in Dark Mode */
+  --cat-math: #A78BFA;
+  --cat-math-bg: rgba(167, 139, 250, 0.12);
+  --cat-math-border: rgba(167, 139, 250, 0.3);
+
+  --cat-engineering: #60A5FA;
+  --cat-engineering-bg: rgba(96, 165, 250, 0.12);
+  --cat-engineering-border: rgba(96, 165, 250, 0.3);
+
+  --cat-finance: #34D399;
+  --cat-finance-bg: rgba(52, 211, 153, 0.12);
+  --cat-finance-border: rgba(52, 211, 153, 0.3);
+
+  --cat-science: #38BDF8;
+  --cat-science-bg: rgba(56, 189, 248, 0.12);
+  --cat-science-border: rgba(56, 189, 248, 0.3);
+
+  --cat-health: #FB7185;
+  --cat-health-bg: rgba(251, 113, 133, 0.12);
+  --cat-health-border: rgba(251, 113, 133, 0.3);
+
+  --cat-everyday: #FBBF24;
+  --cat-everyday-bg: rgba(251, 191, 36, 0.12);
+  --cat-everyday-border: rgba(251, 191, 36, 0.3);
+
+  /* Shadows for Dark Mode */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 24px rgba(34, 211, 238, 0.25);
+}

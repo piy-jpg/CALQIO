@@ -1,0 +1,419 @@
+/* ==========================================================================
+   THEME TRANSITIONS & ENHANCEMENTS
+   ========================================================================== */
+
+/* Smooth color transitions when theme changes */
+body.theme-transitioning,
+body.theme-transitioning *,
+body.theme-transitioning *::before,
+body.theme-transitioning *::after {
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease, fill 200ms ease !important;
+}
+
+/* Category Color Accents */
+.cat-calculators-bg { background: rgba(99, 102, 241, 0.12); color: var(--cat-calculators); }
+.cat-finance-bg     { background: rgba(16, 185, 129, 0.12); color: var(--cat-finance); }
+.cat-health-bg      { background: rgba(236, 72, 153, 0.12); color: var(--cat-health); }
+.cat-datetime-bg    { background: rgba(245, 158, 11, 0.12); color: var(--cat-datetime); }
+.cat-converters-bg  { background: rgba(6, 182, 212, 0.12); color: var(--cat-converters); }
+.cat-other-bg       { background: rgba(139, 92, 246, 0.12); color: var(--cat-other); }
+
+/* Settings Form Elements */
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.settings-row:last-child {
+  border-bottom: none;
+}
+
+.settings-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.settings-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.settings-desc {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 26px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--text-secondary);
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+  background-color: #ffffff;
+}
+
+/* ==========================================================================
+   3D SPATIAL CANVAS & INTERACTIVE PARALLAX TILT
+   ========================================================================== */
+.calqio-3d-ambient-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
+}
+
+/* 3D Perspective Context for Cards & Interactive Elements */
+.tilt-3d-element {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* Holographic Specular Light Glare */
+.tilt-glare-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  mix-blend-mode: overlay;
+}
+
+[data-theme="dark"] .tilt-glare-layer {
+  mix-blend-mode: screen;
+}
+
+/* 3D Floating Geometry Badges */
+@keyframes float3D {
+  0% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotateX(4deg) rotateY(-4deg);
+  }
+  100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+  }
+}
+
+.floating-3d-badge {
+  display: inline-block;
+  animation: float3D 6s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+/* 3D Elevated Keypad Buttons */
+.keypad-btn.tilt-3d-element:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 14px -2px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] .keypad-btn.tilt-3d-element:hover {
+  box-shadow: 0 6px 16px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   ULTRA-SMOOTH MICRO-ANIMATIONS & INTERACTION REFINEMENTS
+   ========================================================================== */
+
+/* 1. Silky Page and Route Entrance Animation */
+@keyframes smoothPageEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.main-container {
+  animation: smoothPageEntrance 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  will-change: opacity, transform;
+}
+
+/* 2. Staggered Grid Card Reveal */
+@keyframes cardFloatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.domain-cards-grid > *,
+.platform-stats-grid > *,
+.disciplines-chips-grid > *,
+.calculators-grid > * {
+  animation: cardFloatUp 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.domain-cards-grid > *:nth-child(1) { animation-delay: 40ms; }
+.domain-cards-grid > *:nth-child(2) { animation-delay: 80ms; }
+.domain-cards-grid > *:nth-child(3) { animation-delay: 120ms; }
+.domain-cards-grid > *:nth-child(4) { animation-delay: 160ms; }
+.domain-cards-grid > *:nth-child(5) { animation-delay: 200ms; }
+.domain-cards-grid > *:nth-child(6) { animation-delay: 240ms; }
+
+.platform-stats-grid > *:nth-child(1) { animation-delay: 30ms; }
+.platform-stats-grid > *:nth-child(2) { animation-delay: 60ms; }
+.platform-stats-grid > *:nth-child(3) { animation-delay: 90ms; }
+.platform-stats-grid > *:nth-child(4) { animation-delay: 120ms; }
+
+/* 3. Luminous Shimmer Light Sweep on Featured Elements */
+@keyframes lightShimmerSweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.featured-calculator-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.03) 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: lightShimmerSweep 7s infinite linear;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* 4. Calculator Result Value Glow Pulse on Change */
+@keyframes resultValuePop {
+  0% {
+    transform: scale(0.96);
+    filter: brightness(1.2);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+.result-main-value.value-updated,
+.pro-sci-res.value-updated,
+.basic-main-value.value-updated {
+  animation: resultValuePop 250ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 5. Smooth Button Micro-Bounces */
+.btn {
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1), background-color 150ms ease, border-color 150ms ease !important;
+}
+
+.btn:hover {
+  transform: translateY(-1.5px);
+}
+
+.btn:active {
+  transform: translateY(0.5px) scale(0.98);
+}
+
+/* 6. Glowing Focus Rings on Input Fields */
+input[type="number"],
+input[type="text"],
+select {
+  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1), background-color 200ms ease;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
+  transform: translateY(-0.5px);
+}
+
+/* 7. Respect Accessibility / Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   ELEGANT DARK MODE REFINEMENTS FOR TOP & SIDE NAVBAR
+   ========================================================================== */
+[data-theme="dark"] .app-header {
+  background: rgba(10, 15, 33, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5), inset 0 -1px 0 0 rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="dark"] .nav-quick-links {
+  background: rgba(15, 22, 48, 0.8);
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+[data-theme="dark"] .sidebar-toggle-btn {
+  background: rgba(20, 30, 65, 0.7);
+  border-color: rgba(255, 255, 255, 0.09);
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .sidebar-toggle-btn:hover {
+  background: rgba(34, 211, 238, 0.15);
+  border-color: rgba(34, 211, 238, 0.35);
+  color: #22D3EE;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+}
+
+[data-theme="dark"] .header-search-btn {
+  background: rgba(14, 21, 46, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #94A3B8;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .header-search-btn:hover {
+  background: rgba(18, 27, 60, 0.95);
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .app-sidebar {
+  background: rgba(10, 15, 33, 0.95);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 4px 0 24px -4px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .nav-link {
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .nav-link:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #F8FAFC;
+}
+
+[data-theme="dark"] .nav-link.active {
+  background: rgba(34, 211, 238, 0.12);
+  color: #22D3EE;
+  border-color: rgba(34, 211, 238, 0.25);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
+}
+
+[data-theme="dark"] .category-header:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .category-items {
+  border-left-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .nav-sublink {
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .nav-sublink:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #F8FAFC;
+}
+
+[data-theme="dark"] .nav-sublink.active {
+  background: rgba(34, 211, 238, 0.14);
+  color: #22D3EE;
+  border-color: rgba(34, 211, 238, 0.3);
+}
+
+[data-theme="dark"] .sidebar-footer {
+  background: rgba(8, 12, 26, 0.98);
+  border-top-color: rgba(255, 255, 255, 0.07);
+}
+
+[data-theme="dark"] .sidebar-status-card {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.06) 0%, rgba(52, 211, 153, 0.06) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .sidebar-status-card:hover {
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.12);
+}
+
+[data-theme="dark"] .mobile-bottom-nav {
+  background: rgba(10, 15, 33, 0.92);
+  border-top-color: rgba(255, 255, 255, 0.07);
+}
+
+
+
