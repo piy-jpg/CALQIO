@@ -26,7 +26,6 @@ export const Navbar = {
           <div class="logo-text-group">
             <span class="logo-text">calqio</span>
           </div>
-          <span class="logo-badge">PRO</span>
         </a>
 
         <!-- Quick Navigation Hubs -->
