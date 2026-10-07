@@ -107,8 +107,8 @@ export const GoogleAuthService = {
       this.onAuthChange(callback);
     }
 
-    if (this.isInitialized && this.tokenClient) return;
-    if (typeof window === 'undefined') return;
+    // 0. Check URL for returning redirect tokens (e.g. hash fragments / params)
+    await this.checkUrlForOAuthCallback();
 
     await this.waitForGoogleSdk();
 
@@ -370,7 +370,55 @@ export const GoogleAuthService = {
   },
 
   /**
-   * Complete Sign-In: update state, persist session, migrate guest data, close modal
+   * Check URL for returning OAuth redirect tokens and show website
+   */
+  async checkUrlForOAuthCallback() {
+    if (typeof window === 'undefined') return null;
+    try {
+      const hash = window.location.hash || '';
+      const search = window.location.search || '';
+
+      if (hash.includes('access_token=') || hash.includes('id_token=')) {
+        const hashParams = hash.substring(1);
+        const params = new URLSearchParams(hashParams);
+        const accessToken = params.get('access_token');
+        const idToken = params.get('id_token');
+
+        // Clean up URL hash to restore normal website routing
+        window.history.replaceState(null, '', window.location.pathname + '#/');
+
+        if (accessToken) {
+          const user = await this.fetchGoogleUserInfo(accessToken);
+          this.notifyAuthListeners(user);
+          return user;
+        } else if (idToken) {
+          const user = await this.handleCredentialResponse({ credential: idToken });
+          this.notifyAuthListeners(user);
+          return user;
+        }
+      } else if (search.includes('code=')) {
+        const params = new URLSearchParams(search);
+        const code = params.get('code');
+        window.history.replaceState(null, '', window.location.pathname + '#/');
+        if (code) {
+          try {
+            const res = await AuthApi.googleLogin({ code });
+            if (res && res.user) {
+              return await this.completeSignIn(res.user);
+            }
+          } catch (e) {
+            console.warn('OAuth code exchange note:', e);
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('OAuth URL redirect check note:', e);
+    }
+    return null;
+  },
+
+  /**
+   * Complete Sign-In: update state, persist session, migrate guest data, close modal, show website
    */
   async completeSignIn(googleUser) {
     try {
@@ -394,6 +442,20 @@ export const GoogleAuthService = {
       // Explicitly cleanup any open modal overlay from DOM
       const modalRoot = document.getElementById('auth-modal-root');
       if (modalRoot) modalRoot.innerHTML = '';
+      const backdrop = document.getElementById('auth-modal-backdrop');
+      if (backdrop) backdrop.remove();
+
+      // Show authenticated website view immediately
+      const mainEl = document.getElementById('app-main');
+      const headerEl = document.getElementById('app-header');
+      if (typeof window !== 'undefined') {
+        import('../router.js').then(({ Router }) => {
+          if (mainEl) Router.handleRoute();
+        }).catch(() => {});
+        import('../ui/navbar.js').then(({ Navbar }) => {
+          if (headerEl) Navbar.render(headerEl);
+        }).catch(() => {});
+      }
 
       // Migrate guest history, favorites, and settings in the background
       Storage.syncGuestDataToServer().catch(e => console.warn('Background sync note:', e));
