@@ -31,7 +31,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (cmdPaletteEl) CommandPalette.render(cmdPaletteEl);
   if (authModalEl) {
     state.subscribe('authModalOpen', () => AuthModal.render(authModalEl));
-    state.subscribe('currentUser', () => AuthModal.render(authModalEl));
+    state.subscribe('currentUser', () => {
+      AuthModal.render(authModalEl);
+      if (mainEl) Router.handleRoute();
+    });
   }
 
   // 3. Initialize Router for Dynamic Views

@@ -112,6 +112,9 @@ export const Dashboard = {
       }
     ];
 
+    const user = state.get('currentUser');
+    const firstName = user ? (user.name ? user.name.split(' ')[0] : 'there') : '';
+
     container.innerHTML = `
       <div class="dashboard-viewport">
         <!-- Ambient Visual Background Layers -->
@@ -124,13 +127,23 @@ export const Dashboard = {
         <div class="main-container dashboard-content-layer">
           <!-- 1. HERO SECTION -->
           <section class="dashboard-hero">
-            <div class="hero-eyebrow">
-              <span class="hero-pulse-dot"></span>
-              <span>CALQIO • PRECISION CALCULATION PLATFORM</span>
-            </div>
-
-            <h1 class="hero-title">Precision Solvers for <span class="hero-highlight-text">Every Domain.</span></h1>
-            <p class="hero-subtitle">Engineering, mathematics, finance, science, and everyday calculations — unified in one powerful workspace.</p>
+            ${user ? `
+              <!-- Authenticated Welcome Banner -->
+              <div class="hero-eyebrow" style="background: linear-gradient(135deg, rgba(66, 133, 244, 0.12) 0%, rgba(52, 168, 83, 0.12) 100%); border-color: rgba(66, 133, 244, 0.3); padding: 6px 14px 6px 8px; margin-bottom: 1.25rem;">
+                <img src="${user.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + encodeURIComponent(user.name)}" alt="${user.name}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1.5px solid #4285F4;" />
+                <span style="font-weight: 700; color: var(--text-primary);">Welcome back, <strong style="color: #4285F4;">${firstName}</strong>!</span>
+                <span style="font-size: 0.72rem; color: #10B981; font-weight: 700; background: rgba(16, 185, 129, 0.15); padding: 2px 8px; border-radius: 999px; margin-left: 4px;">● Cloud Synced</span>
+              </div>
+              <h1 class="hero-title">Welcome, <span class="hero-highlight-text">${user.name || firstName}</span></h1>
+              <p class="hero-subtitle">Your personal CALQIO workspace is active. Explore 118+ solvers, access saved calculations, and sync across your devices in real time.</p>
+            ` : `
+              <div class="hero-eyebrow">
+                <span class="hero-pulse-dot"></span>
+                <span>CALQIO • PRECISION CALCULATION PLATFORM</span>
+              </div>
+              <h1 class="hero-title">Precision Solvers for <span class="hero-highlight-text">Every Domain.</span></h1>
+              <p class="hero-subtitle">Engineering, mathematics, finance, science, and everyday calculations — unified in one powerful workspace.</p>
+            `}
 
             <!-- Large Premium Search Box -->
             <div class="hero-search-box" id="hero-search-trigger">
