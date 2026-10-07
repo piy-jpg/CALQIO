@@ -1007,6 +1007,9 @@
   flex-direction: column;
   align-items: center;
   gap: 0.95rem;
+  position: relative;
+}
+
 /* --------------------------------------------------------------------------
    Premium Authenticated Hero & Luminous Welcome Showcase
    -------------------------------------------------------------------------- */
