@@ -59,10 +59,10 @@ export const Storage = {
   // Theme
   getTheme() {
     try {
-      if (typeof localStorage === 'undefined') return 'light';
-      return localStorage.getItem(STORAGE_KEYS.THEME) || 'light';
+      if (typeof localStorage === 'undefined') return 'dark';
+      return localStorage.getItem(STORAGE_KEYS.THEME) || 'dark';
     } catch (e) {
-      return 'light';
+      return 'dark';
     }
   },
 
