@@ -184,9 +184,7 @@ export const AuthModal = {
 
     if (logoutBtn) {
       logoutBtn.addEventListener('click', () => {
-        AuthApi.logout();
-        state.set('currentUser', null);
-        Toast.show('Signed out from CALQIO.', 'info');
+        GoogleAuthService.signOut();
         closeModal();
       });
     }
