@@ -14,6 +14,7 @@ export const GoogleAuthService = {
   DEFAULT_CLIENT_ID: '880806707459-d6sfl0q5hk59359026knsqkq6hf4r8i0.apps.googleusercontent.com',
   isInitialized: false,
   tokenClient: null,
+  authListeners: new Set(),
 
   /**
    * Get active Google Client ID
@@ -27,6 +28,26 @@ export const GoogleAuthService = {
       }
     }
     return this.DEFAULT_CLIENT_ID;
+  },
+
+  /**
+   * Register a listener for auth changes
+   */
+  onAuthChange(callback) {
+    if (typeof callback === 'function') {
+      this.authListeners.add(callback);
+    }
+    return () => this.authListeners.delete(callback);
+  },
+
+  notifyAuthListeners(user) {
+    this.authListeners.forEach(cb => {
+      try {
+        cb(user);
+      } catch (e) {
+        console.warn('Auth listener notification error:', e);
+      }
+    });
   },
 
   /**
@@ -52,7 +73,7 @@ export const GoogleAuthService = {
   /**
    * Wait for Google Identity Services SDK to load asynchronously
    */
-  async waitForGoogleSdk(maxWaitMs = 3000) {
+  async waitForGoogleSdk(maxWaitMs = 4000) {
     if (typeof window === 'undefined') return false;
     if (window.google?.accounts?.oauth2 || window.google?.accounts?.id) return true;
 
@@ -74,7 +95,13 @@ export const GoogleAuthService = {
    * Initialize Google Identity Services (GIS)
    */
   async init(callback) {
+    if (callback) {
+      this.onAuthChange(callback);
+    }
+
+    if (this.isInitialized) return;
     if (typeof window === 'undefined') return;
+
     await this.waitForGoogleSdk();
     if (!window.google?.accounts) return;
 
@@ -88,7 +115,7 @@ export const GoogleAuthService = {
           client_id: clientId,
           callback: async (response) => {
             const user = await this.handleCredentialResponse(response);
-            if (callback) callback(user);
+            this.notifyAuthListeners(user);
           },
           auto_select: false,
           cancel_on_tap_outside: true
@@ -103,7 +130,7 @@ export const GoogleAuthService = {
           callback: async (tokenResponse) => {
             if (tokenResponse && tokenResponse.access_token) {
               const user = await this.fetchGoogleUserInfo(tokenResponse.access_token);
-              if (callback) callback(user);
+              this.notifyAuthListeners(user);
             } else if (tokenResponse && tokenResponse.error) {
               this.handleAuthError(tokenResponse.error);
             }
@@ -186,7 +213,6 @@ export const GoogleAuthService = {
 
     if (typeof window !== 'undefined' && window.google?.accounts?.id) {
       try {
-        containerEl.innerHTML = '';
         window.google.accounts.id.renderButton(containerEl, {
           theme: state.get('theme') === 'dark' ? 'filled_black' : 'outline',
           size: 'large',
@@ -211,9 +237,11 @@ export const GoogleAuthService = {
     // 1. Use TokenClient to trigger authentic Google Accounts Chooser Popup
     if (this.tokenClient) {
       return new Promise((resolve) => {
+        const prevCallback = this.tokenClient.callback;
         this.tokenClient.callback = async (tokenResponse) => {
           if (tokenResponse && tokenResponse.access_token) {
             const user = await this.fetchGoogleUserInfo(tokenResponse.access_token);
+            this.notifyAuthListeners(user);
             resolve(user);
           } else if (tokenResponse && tokenResponse.error) {
             this.handleAuthError(tokenResponse.error);
@@ -221,6 +249,7 @@ export const GoogleAuthService = {
           } else {
             resolve(null);
           }
+          if (prevCallback) prevCallback(tokenResponse);
         };
 
         try {
@@ -266,7 +295,7 @@ export const GoogleAuthService = {
   },
 
   /**
-   * Complete Sign-In: update state, persist session, migrate guest data
+   * Complete Sign-In: update state, persist session, migrate guest data, close modal
    */
   async completeSignIn(googleUser) {
     try {
@@ -281,12 +310,18 @@ export const GoogleAuthService = {
       }
 
       const user = resData.user || googleUser;
+      
+      // Close modal first, then update user and state
+      state.set('authModalOpen', false);
       Storage.setCurrentUser(user);
       state.set('currentUser', user);
-      state.set('authModalOpen', false);
 
-      // Migrate guest history, favorites, and settings into the authenticated session
-      await Storage.syncGuestDataToServer();
+      // Explicitly cleanup any open modal overlay from DOM
+      const modalRoot = document.getElementById('auth-modal-root');
+      if (modalRoot) modalRoot.innerHTML = '';
+
+      // Migrate guest history, favorites, and settings in the background
+      Storage.syncGuestDataToServer().catch(e => console.warn('Background sync note:', e));
 
       Toast.show(`✓ Welcome, ${user.name}! Signed in with Google.`, 'success');
       return user;
@@ -311,6 +346,11 @@ export const GoogleAuthService = {
     AuthApi.logout();
     Storage.removeCurrentUser();
     state.set('currentUser', null);
+    state.set('authModalOpen', false);
+    
+    const modalRoot = document.getElementById('auth-modal-root');
+    if (modalRoot) modalRoot.innerHTML = '';
+
     Toast.show('Signed out from CALQIO.', 'info');
   }
 };

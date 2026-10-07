@@ -152,7 +152,10 @@ export const AuthModal = {
     const logoutBtn = rootEl.querySelector('#auth-logout-btn');
     const googleBtn = rootEl.querySelector('#auth-google-btn');
 
-    const closeModal = () => state.set('authModalOpen', false);
+    const closeModal = () => {
+      state.set('authModalOpen', false);
+      rootEl.innerHTML = '';
+    };
 
     if (backdrop) {
       backdrop.addEventListener('click', (e) => {
@@ -169,7 +172,10 @@ export const AuthModal = {
         googleBtn.disabled = true;
 
         try {
-          await GoogleAuthService.promptSignIn();
+          const user = await GoogleAuthService.promptSignIn();
+          if (user) {
+            closeModal();
+          }
         } catch (e) {
           console.warn('Google sign in error:', e);
         } finally {
@@ -179,7 +185,7 @@ export const AuthModal = {
       });
     }
 
-    // Auto-init Google Identity Services & OAuth2
+    // Auto-init Google Identity Services & OAuth2 listener
     GoogleAuthService.init((user) => {
       if (user) closeModal();
     });
