@@ -6,9 +6,16 @@
 const TOKEN_KEY = 'calqio_jwt_token';
 
 export const ApiClient = {
+  _getStorage() {
+    if (typeof window !== 'undefined' && window.localStorage) return window.localStorage;
+    if (typeof localStorage !== 'undefined') return localStorage;
+    return null;
+  },
+
   getToken() {
     try {
-      return localStorage.getItem(TOKEN_KEY);
+      const storage = this._getStorage();
+      return storage ? storage.getItem(TOKEN_KEY) : null;
     } catch (e) {
       return null;
     }
@@ -16,10 +23,12 @@ export const ApiClient = {
 
   setToken(token) {
     try {
+      const storage = this._getStorage();
+      if (!storage) return;
       if (token) {
-        localStorage.setItem(TOKEN_KEY, token);
+        storage.setItem(TOKEN_KEY, token);
       } else {
-        localStorage.removeItem(TOKEN_KEY);
+        storage.removeItem(TOKEN_KEY);
       }
     } catch (e) {
       console.warn('Could not store token:', e);

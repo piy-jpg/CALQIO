@@ -161,34 +161,39 @@ export const Navbar = {
       });
     }
 
-    state.subscribe('currentUser', () => {
-      this.render(headerEl);
-    });
+    // Register global reactive subscriptions once
+    if (!this._hasSubscribed) {
+      this._hasSubscribed = true;
+      
+      state.subscribe('currentUser', () => {
+        this.render(headerEl);
+      });
 
-    // Update favorite count badge
-    state.subscribe('favorites', ({ value }) => {
-      const favBadge = headerEl.querySelector('#nav-fav-badge');
-      const favLink = headerEl.querySelector('#nav-fav-link');
-      const count = Array.isArray(value) ? value.length : 0;
-      if (count > 0) {
-        if (!favBadge && favLink) {
-          const badge = document.createElement('span');
-          badge.id = 'nav-fav-badge';
-          badge.className = 'nav-count-badge';
-          badge.textContent = count;
-          favLink.appendChild(badge);
+      state.subscribe('favorites', ({ value }) => {
+        const favBadge = headerEl.querySelector('#nav-fav-badge');
+        const favLink = headerEl.querySelector('#nav-fav-link');
+        const count = Array.isArray(value) ? value.length : 0;
+        if (count > 0) {
+          if (!favBadge && favLink) {
+            const badge = document.createElement('span');
+            badge.id = 'nav-fav-badge';
+            badge.className = 'nav-count-badge';
+            badge.textContent = count;
+            favLink.appendChild(badge);
+          } else if (favBadge) {
+            favBadge.textContent = count;
+          }
         } else if (favBadge) {
-          favBadge.textContent = count;
+          favBadge.remove();
         }
-      } else if (favBadge) {
-        favBadge.remove();
-      }
-    });
+      });
 
-    // Update active pill on hash navigation
-    window.addEventListener('hashchange', () => {
-      this.updateActivePills(headerEl);
-    });
+      if (typeof window !== 'undefined') {
+        window.addEventListener('hashchange', () => {
+          this.updateActivePills(headerEl);
+        });
+      }
+    }
   }
 };
 
