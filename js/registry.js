@@ -4,6 +4,7 @@
  */
 
 import { CalculatorPage } from './engine/calculatorPage.js';
+import { generateDynamicSolvers } from './calculators/dynamicCatalog.js';
 
 // Specialized Keypad Calculators
 import { BasicCalculator } from './calculators/basic.js';
@@ -472,10 +473,12 @@ const DIRECT_ALIASES = {
   'solar_panel_calculator': 'electrical_energy_kwh'
 };
 
-for (const [alias, targetId] of Object.entries(DIRECT_ALIASES)) {
-  const target = CALCULATORS_MAP.get(targetId);
-  if (target && !CALCULATORS_MAP.has(alias)) {
-    CALCULATORS_MAP.set(alias, target);
+// Populate all taxonomy calculators with dynamic precision mathematical solvers
+const dynamicSolvers = generateDynamicSolvers();
+for (const [id, solverInstance] of dynamicSolvers.entries()) {
+  if (!CALCULATORS_MAP.has(id)) {
+    CALCULATORS_MAP.set(id, solverInstance);
+    CALCULATORS_LIST.push(solverInstance);
   }
 }
 
