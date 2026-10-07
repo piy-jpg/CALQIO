@@ -1135,15 +1135,63 @@ body.sidebar-collapsed .category-header {
 
 @media (max-width: 768px) {
   .app-header {
-    padding: 0 0.85rem;
+    padding: 0 0.65rem;
+    height: 56px;
+    gap: 0.5rem;
+  }
+
+  .header-left {
+    gap: 0.45rem;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .logo-link {
+    padding: 2px 4px;
+    gap: 0.45rem;
+  }
+
+  .logo-img-wrapper {
+    width: 30px;
+    height: 30px;
+  }
+
+  .logo-img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .logo-text {
+    font-size: 1.15rem;
   }
 
   .header-center {
     display: none;
   }
 
+  .header-right {
+    gap: 0.35rem;
+  }
+
+  .sidebar-toggle-btn,
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+
   .mobile-search-btn {
     display: flex !important;
+  }
+
+  .nav-signin-pill {
+    height: 34px;
+    padding: 0 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .nav-user-pill {
+    height: 34px;
+    padding: 0 0.6rem 0 0.35rem;
   }
 
   .logo-pill {
