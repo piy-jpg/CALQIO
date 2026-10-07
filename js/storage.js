@@ -13,7 +13,8 @@ const STORAGE_KEYS = {
   FAVORITES: 'calqio_favorites',
   HISTORY: 'calqio_history',
   SETTINGS: 'calqio_settings',
-  RECENT_CALCS: 'calqio_recent_calcs'
+  RECENT_CALCS: 'calqio_recent_calcs',
+  USER: 'calqio_user'
 };
 
 const DEFAULT_SETTINGS = {
@@ -26,6 +27,35 @@ const DEFAULT_SETTINGS = {
 const DEFAULT_FAVORITES = ['basic', 'percentage', 'emi', 'bmi', 'gst', 'age'];
 
 export const Storage = {
+  // User Session Persistence
+  getCurrentUser() {
+    try {
+      if (typeof localStorage === 'undefined') return null;
+      const data = localStorage.getItem(STORAGE_KEYS.USER);
+      return data ? JSON.parse(data) : null;
+    } catch (e) {
+      return null;
+    }
+  },
+
+  setCurrentUser(user) {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        if (user) {
+          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.USER);
+        }
+      }
+    } catch (e) {
+      console.warn('LocalStorage error (setCurrentUser):', e);
+    }
+  },
+
+  removeCurrentUser() {
+    this.setCurrentUser(null);
+  },
+
   // Theme
   getTheme() {
     try {

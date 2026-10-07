@@ -22,11 +22,19 @@ class StateStore {
   }
 
   async initAuth() {
+    // 1. Restore local cached user session immediately
+    const cachedUser = Storage.getCurrentUser();
+    if (cachedUser) {
+      this.set('currentUser', cachedUser);
+    }
+
+    // 2. Validate with backend if connected
     if (AuthApi.isAuthenticated()) {
       try {
         const data = await AuthApi.getMe();
         if (data && data.user) {
           this.set('currentUser', data.user);
+          Storage.setCurrentUser(data.user);
           if (data.favorites) {
             this.set('favorites', data.favorites);
           }
@@ -35,8 +43,10 @@ class StateStore {
           }
         }
       } catch (err) {
-        console.warn('Session verification failed, continuing in guest mode:', err.message);
-        AuthApi.logout();
+        console.warn('Backend session verification note:', err.message);
+        if (!cachedUser) {
+          AuthApi.logout();
+        }
       }
     }
   }

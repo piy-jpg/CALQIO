@@ -50,10 +50,33 @@ export const GoogleAuthService = {
   },
 
   /**
+   * Wait for Google Identity Services SDK to load asynchronously
+   */
+  async waitForGoogleSdk(maxWaitMs = 3000) {
+    if (typeof window === 'undefined') return false;
+    if (window.google?.accounts?.oauth2 || window.google?.accounts?.id) return true;
+
+    const startTime = Date.now();
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        if (window.google?.accounts?.oauth2 || window.google?.accounts?.id) {
+          clearInterval(interval);
+          resolve(true);
+        } else if (Date.now() - startTime > maxWaitMs) {
+          clearInterval(interval);
+          resolve(Boolean(window.google?.accounts));
+        }
+      }, 50);
+    });
+  },
+
+  /**
    * Initialize Google Identity Services (GIS)
    */
-  init(callback) {
-    if (typeof window === 'undefined' || !window.google?.accounts) return;
+  async init(callback) {
+    if (typeof window === 'undefined') return;
+    await this.waitForGoogleSdk();
+    if (!window.google?.accounts) return;
 
     const clientId = this.getClientId();
     if (!clientId) return;
@@ -183,7 +206,7 @@ export const GoogleAuthService = {
    * Trigger the REAL Google OAuth Account Chooser / Authentication flow
    */
   async promptSignIn() {
-    this.init();
+    await this.init();
 
     // 1. Use TokenClient to trigger authentic Google Accounts Chooser Popup
     if (this.tokenClient) {
