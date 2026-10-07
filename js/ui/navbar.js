@@ -13,6 +13,10 @@ export const Navbar = {
     const favCount = favs.length;
     const user = state.get('currentUser');
 
+    const userName = (user && user.name) ? user.name : (user && user.email ? user.email.split('@')[0] : 'User');
+    const firstName = userName.split(' ')[0] || 'User';
+    const userAvatar = (user && user.avatar) ? user.avatar : `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(userName)}`;
+
     headerEl.innerHTML = `
       <div class="header-left">
         <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" title="Toggle Sidebar (⌘B)" aria-label="Toggle Sidebar">
@@ -83,10 +87,10 @@ export const Navbar = {
         </button>
 
         <!-- User Profile or Sign-in Pill -->
-        <button id="nav-auth-btn" class="${user ? 'nav-user-pill' : 'nav-signin-pill'}" title="${user ? user.email || user.name : 'Account & Cloud Sync'}">
+        <button id="nav-auth-btn" class="${user ? 'nav-user-pill' : 'nav-signin-pill'}" title="${user ? user.email || userName : 'Account & Cloud Sync'}">
           ${user ? `
-            <img src="${user.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + user.name}" alt="${user.name}" class="nav-user-avatar" />
-            <span class="nav-user-name">${user.name.split(' ')[0]}</span>
+            <img src="${userAvatar}" alt="${userName}" class="nav-user-avatar" />
+            <span class="nav-user-name">${firstName}</span>
           ` : `
             ${getIcon('user')}
             <span>Sign In</span>

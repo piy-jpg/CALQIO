@@ -113,7 +113,9 @@ export const Dashboard = {
     ];
 
     const user = state.get('currentUser');
-    const firstName = user ? (user.name ? user.name.split(' ')[0] : 'there') : '';
+    const userName = (user && user.name) ? user.name : (user && user.email ? user.email.split('@')[0] : 'there');
+    const firstName = (user && user.name) ? user.name.split(' ')[0] : (user && user.email ? user.email.split('@')[0] : 'there');
+    const userAvatar = (user && user.avatar) ? user.avatar : `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(userName)}`;
 
     container.innerHTML = `
       <div class="dashboard-viewport">
@@ -130,11 +132,11 @@ export const Dashboard = {
             ${user ? `
               <!-- Authenticated Welcome Banner -->
               <div class="hero-eyebrow" style="background: linear-gradient(135deg, rgba(66, 133, 244, 0.12) 0%, rgba(52, 168, 83, 0.12) 100%); border-color: rgba(66, 133, 244, 0.3); padding: 6px 14px 6px 8px; margin-bottom: 1.25rem;">
-                <img src="${user.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + encodeURIComponent(user.name)}" alt="${user.name}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1.5px solid #4285F4;" />
+                <img src="${userAvatar}" alt="${userName}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1.5px solid #4285F4;" />
                 <span style="font-weight: 700; color: var(--text-primary);">Welcome back, <strong style="color: #4285F4;">${firstName}</strong>!</span>
                 <span style="font-size: 0.72rem; color: #10B981; font-weight: 700; background: rgba(16, 185, 129, 0.15); padding: 2px 8px; border-radius: 999px; margin-left: 4px;">● Cloud Synced</span>
               </div>
-              <h1 class="hero-title">Welcome, <span class="hero-highlight-text">${user.name || firstName}</span></h1>
+              <h1 class="hero-title">Welcome, <span class="hero-highlight-text">${userName}</span></h1>
               <p class="hero-subtitle">Your personal CALQIO workspace is active. Explore 118+ solvers, access saved calculations, and sync across your devices in real time.</p>
             ` : `
               <div class="hero-eyebrow">

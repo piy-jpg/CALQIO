@@ -14,10 +14,14 @@ import { GoogleAuthService } from './services/googleAuth.js';
 function bootstrap() {
   try {
     // 1. Initialize Theme, 3D Canvas, & Google Identity
-    const savedTheme = state.get('theme');
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    ThreeDimensionalEngine.init();
-    GoogleAuthService.init();
+    try {
+      const savedTheme = state.get('theme');
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      ThreeDimensionalEngine.init();
+      GoogleAuthService.init();
+    } catch (e) {
+      console.warn('Theme/3D init notice:', e);
+    }
 
     // 2. Mount Static App Shell Components
     const headerEl = document.getElementById('app-header');
@@ -27,9 +31,24 @@ function bootstrap() {
     const authModalEl = document.getElementById('auth-modal-root');
     const backdropEl = document.getElementById('sidebar-backdrop');
 
-    if (headerEl) Navbar.render(headerEl);
-    if (sidebarEl) Sidebar.render(sidebarEl);
-    if (cmdPaletteEl) CommandPalette.render(cmdPaletteEl);
+    try {
+      if (headerEl) Navbar.render(headerEl);
+    } catch (e) {
+      console.warn('Navbar render notice:', e);
+    }
+
+    try {
+      if (sidebarEl) Sidebar.render(sidebarEl);
+    } catch (e) {
+      console.warn('Sidebar render notice:', e);
+    }
+
+    try {
+      if (cmdPaletteEl) CommandPalette.render(cmdPaletteEl);
+    } catch (e) {
+      console.warn('CommandPalette render notice:', e);
+    }
+
     if (authModalEl) {
       state.subscribe('authModalOpen', () => AuthModal.render(authModalEl));
       state.subscribe('currentUser', () => {
@@ -39,10 +58,14 @@ function bootstrap() {
     }
 
     // 3. Initialize Router for Dynamic Views
-    if (mainEl) Router.init(mainEl);
+    try {
+      if (mainEl) Router.init(mainEl);
+    } catch (e) {
+      console.warn('Router init notice:', e);
+    }
 
     // 4. Check & Restore Authenticated User Session
-    state.initAuth();
+    state.initAuth().catch(e => console.warn('Auth init note:', e));
 
     // 5. Global Keyboard Shortcuts
     window.addEventListener('keydown', (e) => {
