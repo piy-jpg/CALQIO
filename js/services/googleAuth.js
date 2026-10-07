@@ -11,7 +11,7 @@ import { Toast } from '../toast.js';
 
 export const GoogleAuthService = {
   // Configured Web Client ID from Google Cloud Console
-  DEFAULT_CLIENT_ID: '880806707459-d6sfl0q5hk59359026knsqkq6hf4r8i0.apps.googleusercontent.com',
+  DEFAULT_CLIENT_ID: '985624969915-22gj8ldlmlbd3lv9h0vngmbmdunkjpg9.apps.googleusercontent.com',
   isInitialized: false,
   tokenClient: null,
   authListeners: new Set(),
