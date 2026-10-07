@@ -10,8 +10,8 @@ import { Storage } from '../storage.js';
 import { Toast } from '../toast.js';
 
 export const GoogleAuthService = {
-  // Default Web Client ID (Can also be set via <meta name="google-signin-client_id" content="..."> or window.GOOGLE_CLIENT_ID)
-  DEFAULT_CLIENT_ID: '1084817457812-calqio-app-prod.apps.googleusercontent.com',
+  // Configured Web Client ID from Google Cloud Console
+  DEFAULT_CLIENT_ID: '880806707459-d6sfl0q5hk59359026knsqkq6hf4r8i0.apps.googleusercontent.com',
   isInitialized: false,
   tokenClient: null,
 
