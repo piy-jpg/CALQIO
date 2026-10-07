@@ -9,12 +9,14 @@ import { CommandPalette } from './ui/commandPalette.js';
 import { AuthModal } from './ui/authModal.js';
 import { Router } from './router.js';
 import { ThreeDimensionalEngine } from './ui/threeDimensional.js';
+import { GoogleAuthService } from './services/googleAuth.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // 1. Initialize Theme & 3D Spatial Canvas
+  // 1. Initialize Theme, 3D Canvas, & Google Identity
   const savedTheme = state.get('theme');
   document.documentElement.setAttribute('data-theme', savedTheme);
   ThreeDimensionalEngine.init();
+  GoogleAuthService.init();
 
   // 2. Mount Static App Shell Components
   const headerEl = document.getElementById('app-header');

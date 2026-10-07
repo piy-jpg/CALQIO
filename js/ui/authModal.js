@@ -159,6 +159,11 @@ export const AuthModal = {
     }
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
+    // Auto-init Google Identity Services & OAuth2
+    GoogleAuthService.init((user) => {
+      if (user) closeModal();
+    });
+
     // Google Sign-In button click
     if (googleBtn) {
       googleBtn.addEventListener('click', async () => {
