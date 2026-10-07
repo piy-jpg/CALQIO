@@ -6,7 +6,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "{index.html,assets/**,css/**,js/**,favicon.ico,manifest.json}",
+      "src": "{index.html,assets/**,css/**,js/**,favicon.ico,manifest.json,robots.txt,sitemap.xml,google*.html}",
       "use": "@vercel/static"
     }
   ],
@@ -26,6 +26,18 @@
     {
       "src": "/js/(.*)",
       "dest": "/js/$1"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/robots.txt"
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "/sitemap.xml"
+    },
+    {
+      "src": "/(google[a-zA-Z0-9]+\\.html)",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
