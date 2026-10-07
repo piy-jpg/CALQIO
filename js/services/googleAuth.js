@@ -281,6 +281,7 @@ export const GoogleAuthService = {
       }
 
       const user = resData.user || googleUser;
+      Storage.setCurrentUser(user);
       state.set('currentUser', user);
       state.set('authModalOpen', false);
 
@@ -308,6 +309,7 @@ export const GoogleAuthService = {
       }
     }
     AuthApi.logout();
+    Storage.removeCurrentUser();
     state.set('currentUser', null);
     Toast.show('Signed out from CALQIO.', 'info');
   }
