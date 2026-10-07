@@ -19,14 +19,19 @@ export const ThreeDimensionalEngine = {
    * Initializes the 3D Canvas Background and interactive tilt listeners
    */
   init() {
-    this.createCanvas();
-    this.init3DGeometry();
-    this.bindEvents();
-    this.animate();
-    this.initTiltEffects();
+    try {
+      this.createCanvas();
+      this.init3DGeometry();
+      this.bindEvents();
+      this.animate();
+      this.initTiltEffects();
+    } catch (e) {
+      console.warn('3D Engine init notice:', e);
+    }
   },
 
   createCanvas() {
+    if (typeof document === 'undefined') return;
     let existingCanvas = document.getElementById('calqio-3d-canvas');
     if (!existingCanvas) {
       this.canvas = document.createElement('canvas');
@@ -41,12 +46,13 @@ export const ThreeDimensionalEngine = {
   },
 
   resize() {
-    if (!this.canvas) return;
+    if (!this.canvas || !this.ctx) return;
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    this.canvas.width = this.width * dpr;
-    this.canvas.height = this.height * dpr;
+    this.canvas.width = Math.floor(this.width * dpr);
+    this.canvas.height = Math.floor(this.height * dpr);
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
   },
 
@@ -210,25 +216,45 @@ export const ThreeDimensionalEngine = {
     window.addEventListener('resize', () => {
       this.resize();
       this.init3DGeometry();
-    });
+    }, { passive: true });
 
     window.addEventListener('mousemove', (e) => {
-      this.mouse.targetX = (e.clientX / this.width - 0.5) * 2;
-      this.mouse.targetY = (e.clientY / this.height - 0.5) * 2;
-    });
+      this.mouse.targetX = (e.clientX / (this.width || 1) - 0.5) * 2;
+      this.mouse.targetY = (e.clientY / (this.height || 1) - 0.5) * 2;
+    }, { passive: true });
 
-    const observer = new MutationObserver(() => {
-      this.initTiltEffects();
-    });
-    const mainEl = document.getElementById('app-main');
-    if (mainEl) {
-      observer.observe(mainEl, { childList: true, subtree: true });
-    }
+    // Delegated mouse hover/move for 3D tilt (zero DOM mutation recursion)
+    document.addEventListener('mousemove', (e) => {
+      const card = e.target.closest('.card, .calc-card, .stat-card, .domain-card, .featured-calculator-card, .discipline-chip, .pro-sci-console, .util-hero-card, .keypad-btn');
+      if (!card) return;
+
+      const bounds = card.getBoundingClientRect();
+      const mouseX = e.clientX - bounds.left;
+      const mouseY = e.clientY - bounds.top;
+
+      const centerX = bounds.width / 2;
+      const centerY = bounds.height / 2;
+      const deltaX = (mouseX - centerX) / (centerX || 1);
+      const deltaY = (mouseY - centerY) / (centerY || 1);
+
+      const maxTilt = card.classList.contains('keypad-btn') ? 5 : 7;
+      const rotateX = -deltaY * maxTilt;
+      const rotateY = deltaX * maxTilt;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-3px) scale3d(1.01, 1.01, 1.01)`;
+    }, { passive: true });
+
+    document.addEventListener('mouseout', (e) => {
+      const card = e.target.closest('.card, .calc-card, .stat-card, .domain-card, .featured-calculator-card, .discipline-chip, .pro-sci-console, .util-hero-card, .keypad-btn');
+      if (card && (!e.relatedTarget || !card.contains(e.relatedTarget))) {
+        card.style.transform = '';
+      }
+    }, { passive: true });
   },
 
   animate() {
     this.animId = requestAnimationFrame(() => this.animate());
-    if (!this.ctx) return;
+    if (!this.ctx || !this.width || !this.height) return;
 
     this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.05;
     this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.05;
@@ -337,68 +363,7 @@ export const ThreeDimensionalEngine = {
     });
   },
 
-  /**
-   * 3D Physics-Based Mouse Parallax & Specular Glare Tilt for Cards
-   */
   initTiltEffects() {
-    const targets = document.querySelectorAll('.card, .calc-card, .stat-card, .domain-card, .featured-calculator-card, .discipline-chip, .pro-sci-console, .util-hero-card, .keypad-btn');
-
-    targets.forEach(card => {
-      if (this.tiltCards.has(card)) return;
-      this.tiltCards.add(card);
-
-      card.classList.add('tilt-3d-element');
-
-      if (!card.querySelector('.tilt-glare-layer') && !card.classList.contains('keypad-btn')) {
-        const glare = document.createElement('div');
-        glare.className = 'tilt-glare-layer';
-        card.style.position = 'relative';
-        card.appendChild(glare);
-      }
-
-      let bounds;
-
-      const onMouseEnter = () => {
-        bounds = card.getBoundingClientRect();
-      };
-
-      const onMouseMove = (e) => {
-        if (!bounds) bounds = card.getBoundingClientRect();
-        const mouseX = e.clientX - bounds.left;
-        const mouseY = e.clientY - bounds.top;
-
-        const centerX = bounds.width / 2;
-        const centerY = bounds.height / 2;
-
-        const deltaX = (mouseX - centerX) / centerX;
-        const deltaY = (mouseY - centerY) / centerY;
-
-        const maxTilt = card.classList.contains('keypad-btn') ? 6 : 8;
-        const rotateX = -deltaY * maxTilt;
-        const rotateY = deltaX * maxTilt;
-
-        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px) scale3d(1.015, 1.015, 1.015)`;
-
-        const glareEl = card.querySelector('.tilt-glare-layer');
-        if (glareEl) {
-          const glareX = (mouseX / bounds.width) * 100;
-          const glareY = (mouseY / bounds.height) * 100;
-          glareEl.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 40%, transparent 70%)`;
-          glareEl.style.opacity = '1';
-        }
-      };
-
-      const onMouseLeave = () => {
-        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)`;
-        const glareEl = card.querySelector('.tilt-glare-layer');
-        if (glareEl) {
-          glareEl.style.opacity = '0';
-        }
-      };
-
-      card.addEventListener('mouseenter', onMouseEnter);
-      card.addEventListener('mousemove', onMouseMove);
-      card.addEventListener('mouseleave', onMouseLeave);
-    });
+    // Zero-overhead delegated event handling active
   }
 };
