@@ -85,12 +85,12 @@ export const AuthModal = {
           </div>
 
           <!-- Main Google Sign-In Action Button -->
-          <div id="gsi-button-container" style="display:flex; justify-content:center; margin-bottom: 8px; width: 100%;"></div>
-
-          <button type="button" class="btn-google-auth" id="auth-google-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 13px 18px; border-radius: 14px; font-size: 0.95rem; font-weight: 800; cursor: pointer; transition: all var(--transition-fast); background: var(--bg-surface); border: 1.5px solid var(--border-default); box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);">
-            ${getIcon('google')}
-            <span id="google-btn-text">Continue with Google</span>
-          </button>
+          <div id="gsi-button-container" style="display:flex; justify-content:center; align-items:center; width: 100%; min-height: 48px;">
+            <button type="button" class="btn-google-auth" id="auth-google-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 13px 18px; border-radius: 14px; font-size: 0.95rem; font-weight: 800; cursor: pointer; transition: all var(--transition-fast); background: var(--bg-surface); border: 1.5px solid var(--border-default); box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);">
+              ${getIcon('google')}
+              <span id="google-btn-text">Continue with Google</span>
+            </button>
+          </div>
 
           <div style="margin-top: 1.25rem; text-align: center; font-size: 0.775rem; color: var(--text-muted); line-height: 1.4;">
             🔒 Protected by Google OAuth 2.0 & End-to-End Privacy
@@ -161,16 +161,6 @@ export const AuthModal = {
     }
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
-    // Auto-init Google Identity Services & OAuth2
-    GoogleAuthService.init((user) => {
-      if (user) closeModal();
-    });
-
-    const gsiContainer = rootEl.querySelector('#gsi-button-container');
-    if (gsiContainer) {
-      GoogleAuthService.renderGoogleButton(gsiContainer);
-    }
-
     // Google Sign-In button click
     if (googleBtn) {
       googleBtn.addEventListener('click', async () => {
@@ -187,6 +177,16 @@ export const AuthModal = {
           googleBtn.disabled = false;
         }
       });
+    }
+
+    // Auto-init Google Identity Services & OAuth2
+    GoogleAuthService.init((user) => {
+      if (user) closeModal();
+    });
+
+    const gsiContainer = rootEl.querySelector('#gsi-button-container');
+    if (gsiContainer) {
+      GoogleAuthService.renderGoogleButton(gsiContainer);
     }
 
     if (logoutBtn) {

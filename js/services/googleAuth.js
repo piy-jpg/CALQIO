@@ -180,9 +180,9 @@ export const GoogleAuthService = {
   /**
    * Render Official Google Sign-In Button inside a DOM element
    */
-  renderGoogleButton(containerEl) {
+  async renderGoogleButton(containerEl) {
     if (!containerEl) return;
-    this.init();
+    await this.init();
 
     if (typeof window !== 'undefined' && window.google?.accounts?.id) {
       try {
@@ -194,7 +194,7 @@ export const GoogleAuthService = {
           shape: 'pill',
           text: 'continue_with',
           logo_alignment: 'left',
-          width: Math.min(360, containerEl.offsetWidth || 340)
+          width: Math.min(380, containerEl.offsetWidth || 360)
         });
       } catch (e) {
         console.warn('Google button rendering notice:', e);
