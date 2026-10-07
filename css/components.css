@@ -302,6 +302,34 @@
   transform: translateY(0) scale(1);
 }
 
+/* --------------------------------------------------------------------------
+   Modal Dialog Card (Auth, Profile, and Popups)
+   -------------------------------------------------------------------------- */
+.cmd-palette-modal {
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35), 0 0 0 1px var(--border-subtle);
+  overflow: hidden;
+  position: relative;
+  z-index: 101;
+  transform: translateY(-8px) scale(0.98);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  -webkit-font-smoothing: antialiased;
+}
+
+.cmd-palette-backdrop.open .cmd-palette-modal {
+  transform: translateY(0) scale(1);
+}
+
+[data-theme="dark"] .cmd-palette-modal {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
 .cmd-header {
   display: flex;
   align-items: center;
