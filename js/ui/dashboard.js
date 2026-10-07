@@ -131,10 +131,18 @@ export const Dashboard = {
           <section class="dashboard-hero">
             ${user ? `
               <!-- Authenticated Welcome Banner -->
-              <div class="hero-eyebrow" style="background: linear-gradient(135deg, rgba(66, 133, 244, 0.12) 0%, rgba(52, 168, 83, 0.12) 100%); border-color: rgba(66, 133, 244, 0.3); padding: 6px 14px 6px 8px; margin-bottom: 1.25rem;">
-                <img src="${userAvatar}" alt="${userName}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1.5px solid #4285F4;" />
-                <span style="font-weight: 700; color: var(--text-primary);">Welcome back, <strong style="color: #4285F4;">${firstName}</strong>!</span>
-                <span style="font-size: 0.72rem; color: #10B981; font-weight: 700; background: rgba(16, 185, 129, 0.15); padding: 2px 8px; border-radius: 999px; margin-left: 4px;">● Cloud Synced</span>
+              <div class="hero-welcome-badge" id="hero-welcome-badge">
+                <div class="user-avatar-glow-ring">
+                  <img src="${userAvatar}" alt="${userName}" class="user-avatar-img" />
+                  <span class="user-status-online-dot"></span>
+                </div>
+                <div class="user-welcome-meta">
+                  <span class="user-welcome-label">WELCOME BACK, <strong class="user-welcome-name">${firstName.toUpperCase()}</strong>!</span>
+                  <span class="user-sync-status-pill">
+                    <span class="sync-pulse-dot"></span>
+                    <span>CLOUD SYNCED</span>
+                  </span>
+                </div>
               </div>
               <h1 class="hero-title">Welcome, <span class="hero-highlight-text">${userName}</span></h1>
               <p class="hero-subtitle">Your personal CALQIO workspace is active. Explore 118+ solvers, access saved calculations, and sync across your devices in real time.</p>
@@ -173,7 +181,7 @@ export const Dashboard = {
           <section class="platform-stats-grid">
             <div class="stat-card stat-card-blue">
               <div class="stat-card-header">
-                <span class="stat-label">Total Solvers</span>
+                <span class="stat-label">TOTAL SOLVERS</span>
                 <div class="stat-icon-chip stat-chip-blue">${getIcon('calculator')}</div>
               </div>
               <div class="stat-num stat-num-blue">118+</div>
@@ -182,7 +190,7 @@ export const Dashboard = {
             </div>
             <div class="stat-card stat-card-purple">
               <div class="stat-card-header">
-                <span class="stat-label">Math Solvers</span>
+                <span class="stat-label">MATH SOLVERS</span>
                 <div class="stat-icon-chip stat-chip-purple">${getIcon('math')}</div>
               </div>
               <div class="stat-num stat-num-purple">37</div>
@@ -191,7 +199,7 @@ export const Dashboard = {
             </div>
             <div class="stat-card stat-card-orange">
               <div class="stat-card-header">
-                <span class="stat-label">Engineering Tools</span>
+                <span class="stat-label">ENGINEERING TOOLS</span>
                 <div class="stat-icon-chip stat-chip-orange">${getIcon('engineering')}</div>
               </div>
               <div class="stat-num stat-num-orange">62</div>
@@ -200,7 +208,7 @@ export const Dashboard = {
             </div>
             <div class="stat-card stat-card-emerald">
               <div class="stat-card-header">
-                <span class="stat-label">Finance Models</span>
+                <span class="stat-label">FINANCE MODELS</span>
                 <div class="stat-icon-chip stat-chip-emerald">${getIcon('finance')}</div>
               </div>
               <div class="stat-num stat-num-emerald">7</div>

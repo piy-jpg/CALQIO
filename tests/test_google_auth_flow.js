@@ -128,8 +128,9 @@ async function runTests() {
   console.log('✅ PASS: Navbar updated with authenticated user avatar and name.');
 
   Dashboard.render(mainEl);
-  assert.ok(mainEl.innerHTML.includes('Welcome back, <strong style="color: #4285F4;">Alex</strong>!'), 'Dashboard hero shows personalized welcome greeting');
-  assert.ok(mainEl.innerHTML.includes('● Cloud Synced'), 'Dashboard displays Cloud Synced status badge');
+  assert.ok(mainEl.innerHTML.includes('WELCOME BACK'), 'Dashboard hero shows personalized welcome greeting');
+  assert.ok(mainEl.innerHTML.includes('ALEX'), 'Dashboard displays capitalized user first name');
+  assert.ok(mainEl.innerHTML.includes('CLOUD SYNCED'), 'Dashboard displays Cloud Synced status badge');
   assert.ok(mainEl.innerHTML.includes('Welcome, <span class="hero-highlight-text">Alex Rivera</span>'), 'Dashboard title shows full name');
   console.log('✅ PASS: Dashboard displays personalized welcome banner & Cloud Synced state.');
 
