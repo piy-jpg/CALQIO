@@ -45,63 +45,75 @@ export const CommandPalette = {
   },
 
   bindEvents(container) {
+    if (!container) return;
     const modal = container.querySelector('#cmd-palette-modal');
     const input = container.querySelector('#cmd-search-input');
     const list = container.querySelector('#cmd-results-list');
     const closeBtn = container.querySelector('#cmd-close-btn');
 
     state.subscribe('commandPaletteOpen', ({ value }) => {
+      if (!modal || !input) return;
       if (value) {
         modal.classList.add('open');
         input.value = '';
         this.selectedIndex = 0;
         this.updateResults('');
-        setTimeout(() => input.focus(), 50);
+        setTimeout(() => input?.focus(), 50);
       } else {
         modal.classList.remove('open');
       }
     });
 
-    closeBtn.addEventListener('click', () => state.set('commandPaletteOpen', false));
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        state.set('commandPaletteOpen', false);
-      }
-    });
-
-    input.addEventListener('input', (e) => {
-      this.selectedIndex = 0;
-      this.updateResults(e.target.value);
-    });
-
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        this.selectedIndex = (this.selectedIndex + 1) % Math.max(1, this.currentResults.length);
-        this.renderResultsList(list);
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        this.selectedIndex = (this.selectedIndex - 1 + this.currentResults.length) % Math.max(1, this.currentResults.length);
-        this.renderResultsList(list);
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        if (this.currentResults[this.selectedIndex]) {
-          this.selectItem(this.currentResults[this.selectedIndex]);
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => state.set('commandPaletteOpen', false));
+    }
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          state.set('commandPaletteOpen', false);
         }
-      } else if (e.key === 'Escape') {
-        state.set('commandPaletteOpen', false);
-      }
-    });
+      });
+    }
 
-    list.addEventListener('click', (e) => {
-      const itemEl = e.target.closest('.cmd-item');
-      if (itemEl) {
-        const idx = parseInt(itemEl.dataset.idx, 10);
-        if (this.currentResults[idx]) {
-          this.selectItem(this.currentResults[idx]);
+    if (input) {
+      input.addEventListener('input', (e) => {
+        this.selectedIndex = 0;
+        this.updateResults(e.target.value);
+      });
+    }
+
+    if (input) {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          this.selectedIndex = (this.selectedIndex + 1) % Math.max(1, this.currentResults.length);
+          this.renderResultsList(list);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          this.selectedIndex = (this.selectedIndex - 1 + this.currentResults.length) % Math.max(1, this.currentResults.length);
+          this.renderResultsList(list);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (this.currentResults[this.selectedIndex]) {
+            this.selectItem(this.currentResults[this.selectedIndex]);
+          }
+        } else if (e.key === 'Escape') {
+          state.set('commandPaletteOpen', false);
         }
-      }
-    });
+      });
+    }
+
+    if (list) {
+      list.addEventListener('click', (e) => {
+        const itemEl = e.target.closest('.cmd-item');
+        if (itemEl) {
+          const idx = parseInt(itemEl.dataset.idx, 10);
+          if (this.currentResults[idx]) {
+            this.selectItem(this.currentResults[idx]);
+          }
+        }
+      });
+    }
   },
 
   updateResults(query) {

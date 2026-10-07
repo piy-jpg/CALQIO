@@ -60,7 +60,9 @@ export const Router = {
       Dashboard.render(this.mainContainer);
     }
 
-    this.mainContainer.scrollTop = 0;
-    window.scrollTo(0, 0);
+    if (this.mainContainer) this.mainContainer.scrollTop = 0;
+    if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+      window.scrollTo(0, 0);
+    }
   }
 };
