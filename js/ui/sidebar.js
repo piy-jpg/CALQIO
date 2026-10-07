@@ -119,6 +119,17 @@ export const Sidebar = {
     }
 
     sidebarEl.innerHTML = `
+      <!-- Mobile Drawer Header -->
+      <div class="sidebar-mobile-header">
+        <div class="sidebar-mobile-brand">
+          <img src="assets/logo.png" alt="CALQIO" class="sidebar-mobile-logo" />
+          <span class="sidebar-mobile-title">calqio</span>
+        </div>
+        <button id="sidebar-close-btn" class="sidebar-close-btn" aria-label="Close navigation">
+          ${getIcon('close')}
+        </button>
+      </div>
+
       <div class="sidebar-scroll-area">
         <!-- OVERVIEW SECTION -->
         <div class="sidebar-section">
@@ -245,7 +256,14 @@ export const Sidebar = {
       });
     });
 
-    // Close mobile drawer on link click
+    // Close mobile drawer on link click or explicit close button
+    const closeBtn = sidebarEl.querySelector('#sidebar-close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        document.body.classList.remove('sidebar-open');
+      });
+    }
+
     sidebarEl.addEventListener('click', (e) => {
       const link = e.target.closest('.nav-link') || e.target.closest('.category-header-title');
       if (link && window.innerWidth <= 768) {
