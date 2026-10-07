@@ -1,10 +1,12 @@
 /**
  * CALQIO Authentication & User Profile Modal
- * Glassmorphic account portal with PostgreSQL cloud sync status and seamless authorization.
+ * Glassmorphic account portal with Real-Time Google Authentication,
+ * PostgreSQL cloud sync status, and seamless authorization.
  */
 
 import { state } from '../state.js';
 import { AuthApi } from '../api/auth.js';
+import { GoogleAuthService } from '../services/googleAuth.js';
 import { Storage } from '../storage.js';
 import { getIcon } from '../icons.js';
 import { Toast } from '../toast.js';
@@ -35,7 +37,7 @@ export const AuthModal = {
     return `
       <div class="cmd-palette-backdrop open" id="auth-modal-backdrop">
         <div class="cmd-palette-modal" style="max-width: 460px; padding: 28px; border-radius: var(--radius-2xl); position:relative; overflow:hidden;">
-          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);"></div>
+          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, #4285F4, #EA4335, #FBBC05, #34A853);"></div>
 
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.25rem;">
             <div style="display:flex; align-items:center; gap: 10px;">
@@ -58,10 +60,23 @@ export const AuthModal = {
           </p>
 
           <!-- Highlights Pills -->
-          <div style="display:flex; gap:0.5rem; margin-bottom: 1.5rem; flex-wrap:wrap;">
-            <span class="util-stat-pill" style="font-size:0.75rem; padding: 3px 8px;">✓ Cloud Sync</span>
-            <span class="util-stat-pill" style="font-size:0.75rem; padding: 3px 8px;">✓ 118+ Solvers</span>
+          <div style="display:flex; gap:0.5rem; margin-bottom: 1.25rem; flex-wrap:wrap;">
+            <span class="util-stat-pill" style="font-size:0.75rem; padding: 3px 8px;">✓ Realtime Sync</span>
+            <span class="util-stat-pill" style="font-size:0.75rem; padding: 3px 8px;">✓ 289+ Solvers</span>
             <span class="util-stat-pill" style="font-size:0.75rem; padding: 3px 8px;">✓ Private & Secure</span>
+          </div>
+
+          <!-- Real-Time Google One-Click Auth Button -->
+          <button type="button" class="btn-google-auth" id="auth-google-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 11px 16px; background: var(--bg-surface); border: 1.5px solid var(--border-default); border-radius: var(--radius-lg); font-size: 0.875rem; font-weight: 700; color: var(--text-primary); cursor: pointer; transition: all var(--transition-fast); box-shadow: 0 1px 4px rgba(0,0,0,0.04); margin-bottom: 1.25rem;">
+            ${getIcon('google')}
+            <span id="google-btn-text">Continue with Google</span>
+          </button>
+
+          <!-- OR Divider -->
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem;">
+            <div style="flex: 1; height: 1px; background: var(--border-subtle);"></div>
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;">Or with email</span>
+            <div style="flex: 1; height: 1px; background: var(--border-subtle);"></div>
           </div>
 
           <!-- Tab Selector -->
@@ -96,7 +111,7 @@ export const AuthModal = {
           </form>
 
           <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle); text-align: center; font-size: 0.8125rem; color: var(--text-muted);">
-            Guest session data automatically migrates upon signing in.
+            Guest calculations and pinned tools automatically sync upon signing in.
           </div>
         </div>
       </div>
@@ -104,6 +119,7 @@ export const AuthModal = {
   },
 
   renderProfileView(user) {
+    const isGoogle = user.provider === 'google';
     return `
       <div class="cmd-palette-backdrop open" id="auth-modal-backdrop">
         <div class="cmd-palette-modal" style="max-width: 460px; padding: 28px; border-radius: var(--radius-2xl); position:relative; overflow:hidden;">
@@ -117,19 +133,26 @@ export const AuthModal = {
           </div>
 
           <div style="display:flex; align-items:center; gap: 14px; padding: 16px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); margin-bottom: 1.25rem;">
-            <img src="${user.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + encodeURIComponent(user.name || 'User')}" alt="${user.name}" style="width: 50px; height: 50px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-subtle);" />
-            <div>
+            <img src="${user.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + encodeURIComponent(user.name || 'User')}" alt="${user.name}" style="width: 52px; height: 52px; border-radius: 50%; background: var(--bg-card); border: 2px solid var(--border-subtle); object-fit: cover;" />
+            <div style="flex:1;">
               <div style="font-weight: 800; font-size: 1.1rem; color: var(--text-primary);">${user.name || 'CALQIO User'}</div>
               <div style="font-size: 0.85rem; color: var(--text-secondary);">${user.email}</div>
-              <span class="badge badge-primary" style="margin-top: 4px; display:inline-block; font-size: 0.6875rem;">${(user.role || 'MEMBER').toUpperCase()}</span>
+              <div style="display:flex; align-items:center; gap:6px; margin-top: 4px;">
+                <span class="badge badge-primary" style="font-size: 0.6875rem;">${(user.role || 'MEMBER').toUpperCase()}</span>
+                ${isGoogle ? `
+                  <span style="display:inline-flex; align-items:center; gap:3px; font-size: 0.6875rem; font-weight:700; color:#4285F4; background: rgba(66, 133, 244, 0.1); padding: 1px 6px; border-radius: 5px;">
+                    ${getIcon('google')} Google Verified
+                  </span>
+                ` : ''}
+              </div>
             </div>
           </div>
 
           <div style="padding: 12px 16px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius-lg); margin-bottom: 1.5rem; display:flex; align-items:center; gap: 10px;">
             <span style="color: #10b981; font-size: 1.2rem; font-weight: 800;">✓</span>
             <div style="font-size: 0.8125rem; color: var(--text-primary);">
-              <strong>Cloud Sync Active</strong>
-              <div style="color: var(--text-secondary); font-size: 0.75rem;">Calculation history and favorites are backed up securely.</div>
+              <strong>Real-Time Cloud Sync Active</strong>
+              <div style="color: var(--text-secondary); font-size: 0.75rem;">All calculations, formulas, and favorites are synced in real time.</div>
             </div>
           </div>
 
@@ -146,6 +169,7 @@ export const AuthModal = {
     const closeBtn = rootEl.querySelector('#auth-close-btn');
     const form = rootEl.querySelector('#auth-form');
     const logoutBtn = rootEl.querySelector('#auth-logout-btn');
+    const googleBtn = rootEl.querySelector('#auth-google-btn');
 
     const closeModal = () => state.set('authModalOpen', false);
 
@@ -155,6 +179,24 @@ export const AuthModal = {
       });
     }
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+    // Google Sign-In button click
+    if (googleBtn) {
+      googleBtn.addEventListener('click', async () => {
+        const btnText = googleBtn.querySelector('#google-btn-text');
+        if (btnText) btnText.textContent = 'Connecting Google...';
+        googleBtn.disabled = true;
+
+        try {
+          await GoogleAuthService.promptSignIn();
+        } catch (e) {
+          console.warn('Google sign in error:', e);
+        } finally {
+          if (btnText) btnText.textContent = 'Continue with Google';
+          googleBtn.disabled = false;
+        }
+      });
+    }
 
     // Tab switching
     const tabBtns = rootEl.querySelectorAll('#auth-tab-control .segment-btn');
@@ -217,4 +259,3 @@ export const AuthModal = {
     }
   }
 };
-

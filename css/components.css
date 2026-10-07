@@ -96,6 +96,47 @@
   border-radius: var(--radius-lg);
 }
 
+.btn-google-auth {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.btn-google-auth:hover {
+  background: var(--bg-surface-hover);
+  border-color: #4285F4;
+  box-shadow: 0 4px 14px rgba(66, 133, 244, 0.15);
+  transform: translateY(-1px);
+}
+
+.btn-google-auth:active {
+  transform: translateY(0);
+}
+
+[data-theme="dark"] .btn-google-auth {
+  background: var(--bg-surface);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .btn-google-auth:hover {
+  background: var(--bg-surface-hover);
+  border-color: #4285F4;
+  box-shadow: 0 4px 16px rgba(66, 133, 244, 0.25);
+}
+
 /* --------------------------------------------------------------------------
    Form Inputs & Labels
    -------------------------------------------------------------------------- */

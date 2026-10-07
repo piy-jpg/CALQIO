@@ -134,6 +134,78 @@ router.post('/login', async (req, res, next) => {
 });
 
 /**
+ * POST /api/auth/google
+ * Real-time Google Authentication & Token verification / user upsert
+ */
+router.post('/google', async (req, res, next) => {
+  try {
+    const { credential, email, name, avatar, googleId } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        error: 'Google email is required.'
+      });
+    }
+
+    const userName = name || email.split('@')[0];
+    const userAvatar = avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(userName)}`;
+
+    // Check if user already exists
+    let userRes = await query('SELECT id, email, name, avatar, role FROM users WHERE email = $1', [email.toLowerCase()]);
+    let user;
+
+    if (userRes.rows.length === 0) {
+      // Create user with random hash for password_hash
+      const randomSecret = await bcrypt.hash(`google_${Date.now()}_${Math.random()}`, 10);
+      const insertRes = await query(
+        `INSERT INTO users (email, password_hash, name, avatar, role)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING id, email, name, avatar, role, created_at`,
+        [email.toLowerCase(), randomSecret, userName, userAvatar, 'user']
+      );
+      user = insertRes.rows[0];
+
+      // Create default settings
+      await query(
+        `INSERT INTO user_settings (user_id, currency, decimals, history_retention, sound_effects, theme)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         ON CONFLICT (user_id) DO NOTHING`,
+        [user.id, '₹', 2, true, false, 'light']
+      );
+    } else {
+      user = userRes.rows[0];
+      // Update avatar if provided
+      if (avatar && (!user.avatar || user.avatar.includes('dicebear'))) {
+        await query('UPDATE users SET avatar = $1, name = COALESCE($2, name) WHERE id = $3', [avatar, userName, user.id]);
+        user.avatar = avatar;
+        user.name = userName;
+      }
+    }
+
+    const token = generateToken(user);
+
+    res.json({
+      success: true,
+      message: 'Google authentication successful.',
+      data: {
+        token,
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          avatar: user.avatar,
+          role: user.role,
+          provider: 'google'
+        }
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
  * GET /api/auth/me
  */
 router.get('/me', verifyToken, async (req, res, next) => {
