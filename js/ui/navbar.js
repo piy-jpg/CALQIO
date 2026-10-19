@@ -1,5 +1,5 @@
 /**
- * CALQIO Navbar UI Component (Redesigned & Premium)
+ * CALQIO Navbar UI Component (Clean HTML5 URLs & Reactive State)
  */
 
 import { state } from '../state.js';
@@ -23,7 +23,7 @@ export const Navbar = {
           ${getIcon('menu')}
         </button>
 
-        <a href="#/" class="logo-link" title="CALQIO Precision Solvers">
+        <a href="/" class="logo-link" title="CALQIO Precision Solvers">
           <div class="logo-img-wrapper">
             <img src="assets/logo.png" alt="CALQIO" class="logo-img" />
           </div>
@@ -34,23 +34,23 @@ export const Navbar = {
 
         <!-- Quick Navigation Hubs -->
         <nav class="nav-quick-links" aria-label="Quick Hubs">
-          <a href="#/" class="nav-quick-pill" id="nav-pill-home" title="All Calculators">
+          <a href="/" class="nav-quick-pill" id="nav-pill-home" title="All Calculators">
             <span class="nav-pill-icon">${getIcon('calculator')}</span>
             <span>Calculators</span>
           </a>
-          <a href="#/calc/scientific" class="nav-quick-pill" id="nav-pill-scientific" title="Scientific Calculator">
+          <a href="/calc/scientific" class="nav-quick-pill" id="nav-pill-scientific" title="Scientific Calculator">
             <span class="nav-pill-icon">${getIcon('scientific')}</span>
             <span>Scientific</span>
           </a>
-          <a href="#/category/engineering" class="nav-quick-pill" id="nav-pill-engineering" title="Engineering (10 Disciplines)">
+          <a href="/category/engineering" class="nav-quick-pill" id="nav-pill-engineering" title="Engineering (10 Disciplines)">
             <span class="nav-pill-icon">${getIcon('engineering')}</span>
             <span>Engineering</span>
           </a>
-          <a href="#/category/finance" class="nav-quick-pill" id="nav-pill-finance" title="Finance & Loans">
+          <a href="/category/finance" class="nav-quick-pill" id="nav-pill-finance" title="Finance & Loans">
             <span class="nav-pill-icon">${getIcon('finance')}</span>
             <span>Finance</span>
           </a>
-          <a href="#/calc/unit_converter" class="nav-quick-pill" id="nav-pill-converters" title="Unit Converters">
+          <a href="/calc/unit_converter" class="nav-quick-pill" id="nav-pill-converters" title="Unit Converters">
             <span class="nav-pill-icon">${getIcon('converters')}</span>
             <span>Converters</span>
           </a>
@@ -61,7 +61,7 @@ export const Navbar = {
         <button id="nav-search-trigger" class="search-trigger-btn" aria-label="Search calculators">
           <div class="search-trigger-content">
             <span class="search-icon-sparkle">${getIcon('search')}</span>
-            <span>Search 118+ calculators...</span>
+            <span>Search 289+ calculators...</span>
           </div>
           <div class="nav-search-kbd">
             <kbd>⌘K</kbd>
@@ -76,7 +76,7 @@ export const Navbar = {
         </button>
 
         <!-- Favorites Link with Live Numerical Badge -->
-        <a href="#/favorites" class="icon-btn" id="nav-fav-link" title="Favorites" aria-label="Favorites">
+        <a href="/favorites" class="icon-btn" id="nav-fav-link" title="Favorites" aria-label="Favorites">
           ${getIcon('star')}
           ${favCount > 0 ? `<span class="nav-count-badge" id="nav-fav-badge">${favCount}</span>` : ''}
         </a>
@@ -104,11 +104,11 @@ export const Navbar = {
   },
 
   updateActivePills(headerEl) {
-    const hash = window.location.hash || '#/';
+    const currentPath = window.location.pathname || '/';
     const pills = headerEl.querySelectorAll('.nav-quick-pill');
     pills.forEach(pill => {
       const href = pill.getAttribute('href');
-      if (href === hash || (href !== '#/' && hash.startsWith(href))) {
+      if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
         pill.classList.add('active');
       } else {
         pill.classList.remove('active');
@@ -189,11 +189,9 @@ export const Navbar = {
       });
 
       if (typeof window !== 'undefined') {
-        window.addEventListener('hashchange', () => {
-          this.updateActivePills(headerEl);
-        });
+        window.addEventListener('popstate', () => this.updateActivePills(headerEl));
+        window.addEventListener('hashchange', () => this.updateActivePills(headerEl));
       }
     }
   }
 };
-

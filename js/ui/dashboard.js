@@ -158,7 +158,7 @@ export const Dashboard = {
             <!-- Large Premium Search Box -->
             <div class="hero-search-box" id="hero-search-trigger">
               <span class="hero-search-icon">${getIcon('search')}</span>
-              <input type="text" id="hero-search-input" class="hero-search-input" placeholder="Search 118+ calculators, formulas, or engineering tools..." readonly>
+              <input type="text" id="hero-search-input" class="hero-search-input" placeholder="Search 289+ calculators, formulas, or engineering tools..." readonly>
               <div class="hero-search-shortcut">
                 <kbd class="kbd">⌘K</kbd>
               </div>
@@ -167,13 +167,13 @@ export const Dashboard = {
             <!-- Trending Calculator Shortcuts with Colored Domain Dots -->
             <div class="hero-trending-row">
               <span class="trending-badge">TRENDING</span>
-              <a href="#/calc/scientific" class="trending-link"><span class="dot dot-blue"></span>Scientific Pad</a>
-              <a href="#/calc/ohms_law" class="trending-link"><span class="dot dot-blue"></span>Ohm's Law</a>
-              <a href="#/calc/beam_deflection_stress" class="trending-link"><span class="dot dot-orange"></span>Beam & Civil</a>
-              <a href="#/calc/emi" class="trending-link"><span class="dot dot-emerald"></span>Loan & EMI</a>
-              <a href="#/calc/binary_converter" class="trending-link"><span class="dot dot-emerald"></span>Binary / Hex</a>
-              <a href="#/calc/quadratic_equation" class="trending-link"><span class="dot dot-purple"></span>Quadratic</a>
-              <a href="#/calc/molarity" class="trending-link"><span class="dot dot-cyan"></span>Molarity</a>
+              <a href="/calc/scientific" class="trending-link"><span class="dot dot-blue"></span>Scientific Pad</a>
+              <a href="/calc/ohms_law" class="trending-link"><span class="dot dot-blue"></span>Ohm's Law</a>
+              <a href="/calc/beam_deflection_stress" class="trending-link"><span class="dot dot-orange"></span>Beam & Civil</a>
+              <a href="/calc/emi" class="trending-link"><span class="dot dot-emerald"></span>Loan & EMI</a>
+              <a href="/calc/binary_converter" class="trending-link"><span class="dot dot-emerald"></span>Binary / Hex</a>
+              <a href="/calc/quadratic_equation" class="trending-link"><span class="dot dot-purple"></span>Quadratic</a>
+              <a href="/calc/molarity" class="trending-link"><span class="dot dot-cyan"></span>Molarity</a>
             </div>
           </section>
 
@@ -184,7 +184,7 @@ export const Dashboard = {
                 <span class="stat-label">TOTAL SOLVERS</span>
                 <div class="stat-icon-chip stat-chip-blue">${getIcon('calculator')}</div>
               </div>
-              <div class="stat-num stat-num-blue">118+</div>
+              <div class="stat-num stat-num-blue">289+</div>
               <div class="stat-subtext">Unified precision workspace</div>
               <div class="stat-bar-track"><div class="stat-bar-fill bar-blue" style="width: 100%;"></div></div>
             </div>
@@ -229,7 +229,7 @@ export const Dashboard = {
                   <span class="spec-pill">Rad / Deg Angles</span>
                   <span class="spec-pill">Physical Constants</span>
                 </div>
-                <a href="#/calc/scientific" class="btn btn-featured" style="margin-top: 0.5rem; align-self: flex-start;">
+                <a href="/calc/scientific" class="btn btn-featured" style="margin-top: 0.5rem; align-self: flex-start;">
                   <span>Launch Scientific Pad</span>
                   <span>→</span>
                 </a>
@@ -269,75 +269,75 @@ export const Dashboard = {
                 <h2 class="section-heading">Engineering Mastery</h2>
                 <p class="section-subtext">Professional calculation tools for electrical, mechanical, civil, computer, chemical, automobile, aerospace, and other engineering disciplines.</p>
               </div>
-              <a href="#/category/engineering" class="btn btn-secondary btn-sm" style="font-weight: 600;">Explore Engineering →</a>
+              <a href="/category/engineering" class="btn btn-secondary btn-sm" style="font-weight: 600;">Explore Engineering →</a>
             </div>
 
             <!-- Engineering Discipline Chips Grid -->
             <div class="disciplines-chips-grid">
-              <a href="#/calc/ohms_law" class="discipline-chip chip-electrical">
+              <a href="/calc/ohms_law" class="discipline-chip chip-electrical">
                 <span class="discipline-chip-icon">${getIcon('electrical')}</span>
                 <div class="discipline-chip-text">
                   <span class="discipline-name">Electrical</span>
                   <span class="discipline-count">8 solvers</span>
                 </div>
               </a>
-              <a href="#/calc/torque_calc" class="discipline-chip chip-mechanical">
+              <a href="/calc/torque_calc" class="discipline-chip chip-mechanical">
                 <span class="discipline-chip-icon">${getIcon('engineering')}</span>
                 <div class="discipline-chip-text">
                   <span class="discipline-name">Mechanical</span>
                   <span class="discipline-count">8 solvers</span>
                 </div>
               </a>
-              <a href="#/calc/beam_deflection_stress" class="discipline-chip chip-civil">
+              <a href="/calc/beam_deflection_stress" class="discipline-chip chip-civil">
                 <span class="discipline-chip-icon">${getIcon('construction')}</span>
                 <div class="discipline-chip-text">
                   <span class="discipline-name">Civil</span>
                   <span class="discipline-count">7 solvers</span>
                 </div>
               </a>
-              <a href="#/calc/binary_converter" class="discipline-chip chip-computer">
+              <a href="/calc/binary_converter" class="discipline-chip chip-computer">
                 <span class="discipline-chip-icon">${getIcon('calculator')}</span>
                 <div class="discipline-chip-text">
                   <span class="discipline-name">Computer</span>
                   <span class="discipline-count">6 solvers</span>
                 </div>
               </a>
-              <a href="#/calc/molarity" class="discipline-chip chip-chemical">
+              <a href="/calc/molarity" class="discipline-chip chip-chemical">
                 <span class="discipline-chip-icon">${getIcon('chemistry')}</span>
                 <div class="discipline-chip-text">
                   <span class="discipline-name">Chemical</span>
                   <span class="discipline-count">5 solvers</span>
                 </div>
               </a>
-              <a href="#/calc/engine_displacement" class="discipline-chip chip-automobile">
+              <a href="/calc/engine_displacement" class="discipline-chip chip-automobile">
                 <span class="discipline-chip-icon">${getIcon('car')}</span>
                 <div class="discipline-chip-text">
                   <span class="discipline-name">Automobile</span>
                   <span class="discipline-count">4 solvers</span>
                 </div>
               </a>
-              <a href="#/calc/mach_number_speed" class="discipline-chip chip-aerospace">
+              <a href="/calc/mach_number_speed" class="discipline-chip chip-aerospace">
                 <span class="discipline-chip-icon">${getIcon('engineering')}</span>
                 <div class="discipline-chip-text">
                   <span class="discipline-name">Aerospace</span>
                   <span class="discipline-count">3 solvers</span>
                 </div>
               </a>
-              <a href="#/calc/resistor_calc" class="discipline-chip chip-electronics">
+              <a href="/calc/resistor_calc" class="discipline-chip chip-electronics">
                 <span class="discipline-chip-icon">${getIcon('electrical')}</span>
                 <div class="discipline-chip-text">
                   <span class="discipline-name">Electronics</span>
                   <span class="discipline-count">5 solvers</span>
                 </div>
               </a>
-              <a href="#/calc/carbon_footprint_calc" class="discipline-chip chip-environmental">
+              <a href="/calc/carbon_footprint_calc" class="discipline-chip chip-environmental">
                 <span class="discipline-chip-icon">${getIcon('weather')}</span>
                 <div class="discipline-chip-text">
                   <span class="discipline-name">Environmental</span>
                   <span class="discipline-count">3 solvers</span>
                 </div>
               </a>
-              <a href="#/calc/oee_calculator" class="discipline-chip chip-industrial">
+              <a href="/calc/oee_calculator" class="discipline-chip chip-industrial">
                 <span class="discipline-chip-icon">${getIcon('engineering')}</span>
                 <div class="discipline-chip-text">
                   <span class="discipline-name">Industrial</span>
@@ -354,7 +354,7 @@ export const Dashboard = {
               <h2 class="section-heading" style="display:flex; align-items:center; gap:0.5rem;">
                 <span style="color:#f59e0b;">⭐</span> Pinned Favorites
               </h2>
-              <a href="#/favorites" class="btn btn-subtle btn-sm">Manage →</a>
+              <a href="/favorites" class="btn btn-subtle btn-sm">Manage →</a>
             </div>
             <div class="cards-grid">
               ${favCalculators.slice(0, 4).map(c => this.renderCalcCard(c)).join('')}
@@ -369,7 +369,7 @@ export const Dashboard = {
               <h2 class="section-heading" style="display:flex; align-items:center; gap:0.5rem;">
                 <span>${getIcon('history')}</span> Recent Activity
               </h2>
-              <a href="#/history" class="btn btn-subtle btn-sm">Full History →</a>
+              <a href="/history" class="btn btn-subtle btn-sm">Full History →</a>
             </div>
             <div class="history-list">
               ${history.map(item => `
@@ -380,7 +380,7 @@ export const Dashboard = {
                   </div>
                   <div style="display:flex; align-items:center; gap:1rem;">
                     <span class="history-item-result">${item.result}</span>
-                    <a href="#/calc/${item.calcId}" class="btn btn-subtle btn-sm">Calculate Again</a>
+                    <a href="/calc/${item.calcId}" class="btn btn-subtle btn-sm">Calculate Again</a>
                   </div>
                 </div>
               `).join('')}
@@ -410,12 +410,12 @@ export const Dashboard = {
 
                 <div class="domain-popular-chips">
                   ${domain.popular.map(p => `
-                    <a href="#/calc/${p.id}" class="domain-mini-chip">${p.name}</a>
+                    <a href="/calc/${p.id}" class="domain-mini-chip">${p.name}</a>
                   `).join('')}
                 </div>
 
                 <div class="domain-card-footer">
-                  <a href="#/category/${domain.slug}" class="domain-card-action">View all ${domain.name} →</a>
+                  <a href="/category/${domain.slug}" class="domain-card-action">View all ${domain.name} →</a>
                 </div>
               </div>
             `).join('')}
@@ -429,7 +429,7 @@ export const Dashboard = {
               <h2 class="section-heading">📐 Mathematics Suite</h2>
               <p class="section-subtext">Precision algebraic, geometric, trigonometric, and arithmetic equation solvers.</p>
             </div>
-            <a href="#/category/math" class="btn btn-secondary btn-sm" style="font-weight: 600;">View all Math calculators →</a>
+            <a href="/category/math" class="btn btn-secondary btn-sm" style="font-weight: 600;">View all Math calculators →</a>
           </div>
 
           <div class="cards-grid">
@@ -489,7 +489,11 @@ export const Dashboard = {
       card.addEventListener('click', (e) => {
         if (e.target.closest('.calc-card-favorite-btn')) return;
         const id = card.dataset.calcId;
-        window.location.hash = `#/calc/${id}`;
+        if (window.Router) {
+          window.Router.navigate(`/calc/${id}`);
+        } else {
+          window.location.href = `/calc/${id}`;
+        }
       });
     });
 

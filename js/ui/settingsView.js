@@ -276,8 +276,7 @@ export const SettingsView = {
         localStorage.clear();
         state.setTheme('light');
         Toast.success('CALQIO data reset successfully');
-        window.location.hash = '#/';
-        setTimeout(() => window.location.reload(), 300);
+        window.location.href = '/';
       }
     });
   }

@@ -42,7 +42,7 @@ export const Sidebar = {
       mainCategoriesHtml += `
         <div class="category-group collapsed" data-cat="${catKey}" data-cat-slug="${cat.slug}">
           <div class="category-header">
-            <a href="#/category/${cat.slug}" class="category-header-title" title="${cat.name}">
+            <a href="/category/${cat.slug}" class="category-header-title" title="${cat.name}">
               <span class="category-icon-chip" style="background: ${cat.color}18; color: ${cat.color};">
                 ${getIcon(cat.icon)}
               </span>
@@ -57,14 +57,14 @@ export const Sidebar = {
           </div>
           <div class="category-items">
             ${previewItems.map(item => `
-              <a href="${item.isLive ? `#/calc/${item.id}` : `#/category/${cat.slug}`}" class="nav-link nav-sublink" data-calc-id="${item.id}" title="${item.name}">
+              <a href="${item.isLive ? `/calc/${item.id}` : `/category/${cat.slug}`}" class="nav-link nav-sublink" data-calc-id="${item.id}" title="${item.name}">
                 <div class="nav-link-main">
                   <span class="nav-link-icon nav-sublink-icon">${getIcon(item.icon)}</span>
                   <span class="nav-link-text">${item.name}</span>
                 </div>
               </a>
             `).join('')}
-            <a href="#/category/${cat.slug}" class="category-view-all" data-cat-link="${catKey}" data-cat-slug-link="${cat.slug}">
+            <a href="/category/${cat.slug}" class="category-view-all" data-cat-link="${catKey}" data-cat-slug-link="${cat.slug}">
               <span>View all ${allItemIds.length} tools</span>
               <span class="view-all-arrow">→</span>
             </a>
@@ -86,7 +86,7 @@ export const Sidebar = {
       moreHtml = `
         <div class="category-group collapsed" data-cat="more" data-cat-slug="more">
           <div class="category-header">
-            <a href="#/category/more" class="category-header-title" title="More Categories">
+            <a href="/category/more" class="category-header-title" title="More Categories">
               <span class="category-icon-chip" style="background: ${moreCategory.color}18; color: ${moreCategory.color};">
                 ${getIcon(moreCategory.icon)}
               </span>
@@ -101,7 +101,7 @@ export const Sidebar = {
           </div>
           <div class="category-items">
             ${moreDomainsList.map(dom => `
-              <a href="#/category/${dom.id}" class="nav-link nav-sublink" data-cat-link="${dom.id}" title="${dom.name}">
+              <a href="/category/${dom.id}" class="nav-link nav-sublink" data-cat-link="${dom.id}" title="${dom.name}">
                 <div class="nav-link-main">
                   <span class="nav-link-icon nav-sublink-icon" style="color:${dom.color};">${getIcon(dom.icon)}</span>
                   <span class="nav-link-text">${dom.name}</span>
@@ -109,7 +109,7 @@ export const Sidebar = {
                 <span class="category-subcount">${dom.count}</span>
               </a>
             `).join('')}
-            <a href="#/category/more" class="category-view-all" data-cat-link="more" data-cat-slug-link="more">
+            <a href="/category/more" class="category-view-all" data-cat-link="more" data-cat-slug-link="more">
               <span>View all specialized tools</span>
               <span class="view-all-arrow">→</span>
             </a>
@@ -136,7 +136,7 @@ export const Sidebar = {
           <div class="nav-section-title">Overview</div>
           <ul class="nav-item-list">
             <li>
-              <a href="#/" class="nav-link active" id="nav-home-link" title="Dashboard">
+              <a href="/" class="nav-link active" id="nav-home-link" title="Dashboard">
                 <div class="nav-link-main">
                   <span class="nav-icon-chip chip-overview">
                     ${getIcon('home')}
@@ -166,7 +166,7 @@ export const Sidebar = {
           <div class="nav-section-title">Workspace & Tools</div>
           <ul class="nav-item-list">
             <li>
-              <a href="#/favorites" class="nav-link" id="nav-favs-link" title="Favorites">
+              <a href="/favorites" class="nav-link" id="nav-favs-link" title="Favorites">
                 <div class="nav-link-main">
                   <span class="nav-icon-chip chip-favorites">
                     ${getIcon('star')}
@@ -177,7 +177,7 @@ export const Sidebar = {
               </a>
             </li>
             <li>
-              <a href="#/history" class="nav-link" id="nav-hist-link-sidebar" title="History">
+              <a href="/history" class="nav-link" id="nav-hist-link-sidebar" title="History">
                 <div class="nav-link-main">
                   <span class="nav-icon-chip chip-history">
                     ${getIcon('history')}
@@ -188,7 +188,7 @@ export const Sidebar = {
               </a>
             </li>
             <li>
-              <a href="#/recent" class="nav-link" id="nav-recent-link-sidebar" title="Recently Used">
+              <a href="/recent" class="nav-link" id="nav-recent-link-sidebar" title="Recently Used">
                 <div class="nav-link-main">
                   <span class="nav-icon-chip chip-recent">
                     ${getIcon('recent')}
@@ -206,7 +206,7 @@ export const Sidebar = {
           <div class="nav-section-title">Preferences</div>
           <ul class="nav-item-list">
             <li>
-              <a href="#/settings" class="nav-link" id="nav-settings-link-sidebar" title="Settings">
+              <a href="/settings" class="nav-link" id="nav-settings-link-sidebar" title="Settings">
                 <div class="nav-link-main">
                   <span class="nav-icon-chip chip-settings">
                     ${getIcon('settings')}
@@ -227,7 +227,7 @@ export const Sidebar = {
           </div>
           <div class="sidebar-status-meta">
             <span class="sidebar-version-badge">v2.5 Pro</span>
-            <span class="sidebar-tools-count">118+ Solvers</span>
+            <span class="sidebar-tools-count">289+ Solvers</span>
           </div>
         </div>
       </div>

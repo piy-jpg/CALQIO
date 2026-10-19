@@ -20,7 +20,7 @@ export const Workspace = {
         <div class="main-container" style="text-align: center; padding: 4rem 1rem;">
           <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Calculator Not Found</h2>
           <p style="color: var(--text-muted); margin-bottom: 1.5rem;">The calculator "${calcId}" could not be located.</p>
-          <a href="#/" class="btn btn-primary">Return to Dashboard</a>
+          <a href="/" class="btn btn-primary">Return to Dashboard</a>
         </div>
       `;
       return;

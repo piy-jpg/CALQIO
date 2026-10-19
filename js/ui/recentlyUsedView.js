@@ -67,8 +67,8 @@ export const RecentlyUsedView = {
             <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">No Recent Activity</h3>
             <p style="font-size: 0.925rem; max-width: 440px; margin: 0 auto 1.75rem auto; line-height: 1.5;">Calculators and engineering solvers you launch will automatically appear here for rapid resuming.</p>
             <div style="display:flex; justify-content:center; gap: 0.75rem;">
-              <a href="#/" class="btn btn-primary">Browse All 118+ Tools</a>
-              <a href="#/calc/basic" class="btn btn-secondary">Open Basic Studio</a>
+              <a href="/" class="btn btn-primary">Browse All 289+ Solvers</a>
+              <a href="/calc/basic" class="btn btn-secondary">Open Basic Studio</a>
             </div>
           </div>
         ` : `
@@ -115,7 +115,7 @@ export const RecentlyUsedView = {
 
                   <div class="calc-card-bottom">
                     <span class="calc-card-category">${domainLabel}</span>
-                    <a href="#/calc/${calc.id}" class="calc-card-arrow" aria-label="Open ${calc.name}">
+                    <a href="/calc/${calc.id}" class="calc-card-arrow" aria-label="Open ${calc.name}">
                       ${getIcon('arrowRight')}
                     </a>
                   </div>
@@ -135,7 +135,11 @@ export const RecentlyUsedView = {
       card.addEventListener('click', (e) => {
         if (e.target.closest('.calc-card-favorite-btn')) return;
         const id = card.dataset.calcId;
-        window.location.hash = `#/calc/${id}`;
+        if (window.Router) {
+          window.Router.navigate(`/calc/${id}`);
+        } else {
+          window.location.href = `/calc/${id}`;
+        }
       });
     });
 

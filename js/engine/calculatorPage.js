@@ -53,7 +53,7 @@ export const CalculatorPage = {
             <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">Related Calculators</h3>
             <div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
               ${relatedCalcs.map(rel => `
-                <a href="#/calc/${rel.id}" class="calc-card" style="padding: 1rem 1.25rem;">
+                <a href="/calc/${rel.id}" class="calc-card" style="padding: 1rem 1.25rem;">
                   <div style="display:flex; align-items:center; justify-content:space-between;">
                     <div style="display:flex; align-items:center; gap:0.6rem;">
                       <div class="calc-card-icon" style="width:34px; height:34px; font-size:1.1rem;">

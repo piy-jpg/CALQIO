@@ -8,6 +8,7 @@
     "start": "node server.js",
     "dev": "node server.js",
     "seed": "node server/seeds/seed.js",
+    "sitemap": "node scripts/generate-sitemap.js",
     "test": "node tests/test_api.js && node tests/test_calculators.js && node tests/test_navigation.js"
   },
   "dependencies": {

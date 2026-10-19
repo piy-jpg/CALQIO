@@ -286,10 +286,14 @@ export const CommandPalette = {
   selectItem(item) {
     state.set('commandPaletteOpen', false);
     if (item.type === 'category') {
-      window.location.hash = `#/category/${item.id}`;
+      const target = `/category/${item.id}`;
+      if (window.Router) window.Router.navigate(target);
+      else window.location.href = target;
     } else {
       Storage.recordCalcUsage(item.id);
-      window.location.hash = `#/calc/${item.id}`;
+      const target = `/calc/${item.id}`;
+      if (window.Router) window.Router.navigate(target);
+      else window.location.href = target;
     }
   }
 };

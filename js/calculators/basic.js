@@ -226,7 +226,7 @@ export const BasicCalculator = {
           <!-- TAB 3: RELATED SOLVERS -->
           <div class="companion-tab-pane ${this.state.activeTab === 'related' ? 'active' : ''}" id="pane-related">
             <div class="related-solvers-list">
-              <a href="#/calc/scientific" class="related-solver-item">
+              <a href="/calc/scientific" class="related-solver-item">
                 <span class="related-solver-icon" style="background: rgba(99, 102, 241, 0.12); color: #6366f1;">
                   ${getIcon('scientific')}
                 </span>
@@ -237,7 +237,7 @@ export const BasicCalculator = {
                 <span class="related-solver-arrow">→</span>
               </a>
 
-              <a href="#/calc/fraction" class="related-solver-item">
+              <a href="/calc/fraction" class="related-solver-item">
                 <span class="related-solver-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
                   ${getIcon('math')}
                 </span>
@@ -248,7 +248,7 @@ export const BasicCalculator = {
                 <span class="related-solver-arrow">→</span>
               </a>
 
-              <a href="#/calc/percentage" class="related-solver-item">
+              <a href="/calc/percentage" class="related-solver-item">
                 <span class="related-solver-icon" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b;">
                   ${getIcon('percent')}
                 </span>
@@ -259,7 +259,7 @@ export const BasicCalculator = {
                 <span class="related-solver-arrow">→</span>
               </a>
 
-              <a href="#/calc/unit_converter" class="related-solver-item">
+              <a href="/calc/unit_converter" class="related-solver-item">
                 <span class="related-solver-icon" style="background: rgba(6, 182, 212, 0.12); color: #06b6d4;">
                   ${getIcon('converters')}
                 </span>

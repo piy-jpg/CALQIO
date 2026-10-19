@@ -85,8 +85,8 @@ export const HistoryView = {
             <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">No History Recorded Yet</h3>
             <p style="font-size: 0.925rem; max-width: 440px; margin: 0 auto 1.75rem auto; line-height: 1.5;">Calculations you perform across basic, scientific, finance, health, and percentage tools will automatically appear here.</p>
             <div style="display:flex; justify-content:center; gap: 0.75rem;">
-              <a href="#/calc/basic" class="btn btn-primary">Open Basic Studio</a>
-              <a href="#/calc/scientific" class="btn btn-secondary">Open Scientific</a>
+              <a href="/calc/basic" class="btn btn-primary">Open Basic Studio</a>
+              <a href="/calc/scientific" class="btn btn-secondary">Open Scientific</a>
             </div>
           </div>
         ` : `
@@ -213,7 +213,7 @@ export const HistoryView = {
         <div class="history-card-right">
           <div class="history-card-res">${item.result}</div>
           
-          <a href="#/calc/${item.calcId}" class="btn btn-subtle btn-sm" title="Re-open calculator">
+          <a href="/calc/${item.calcId}" class="btn btn-subtle btn-sm" title="Re-open calculator">
             Open
           </a>
 

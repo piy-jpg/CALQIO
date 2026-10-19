@@ -385,7 +385,7 @@ export const GoogleAuthService = {
         const idToken = params.get('id_token');
 
         // Clean up URL hash to restore normal website routing
-        window.history.replaceState(null, '', window.location.pathname + '#/');
+        window.history.replaceState(null, '', window.location.pathname || '/');
 
         if (accessToken) {
           const user = await this.fetchGoogleUserInfo(accessToken);
@@ -399,7 +399,7 @@ export const GoogleAuthService = {
       } else if (search.includes('code=')) {
         const params = new URLSearchParams(search);
         const code = params.get('code');
-        window.history.replaceState(null, '', window.location.pathname + '#/');
+        window.history.replaceState(null, '', window.location.pathname || '/');
         if (code) {
           try {
             const res = await AuthApi.googleLogin({ code });
